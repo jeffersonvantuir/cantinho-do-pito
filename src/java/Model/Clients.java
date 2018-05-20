@@ -12,6 +12,7 @@ public class Clients {
     private String zipcode;
     private String complement;
     private String district;
+    private int cityId;
 
     public int getId() {
         return id;
@@ -83,5 +84,13 @@ public class Clients {
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+    
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 }
