@@ -1,19 +1,16 @@
-<%-- 
-    Document   : index
-    Created on : 20/05/2018, 17:09:39
-    Author     : jefferson
+<%--
+  Created by IntelliJ IDEA.
+  User: jefferson
+  Date: 22/05/18
+  Time: 13:17
+  To change this template use File | Settings | File Templates.
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <jsp:include page="layout.jsp"/>
-        <%@include file="layout.jsp" %>
-        <title>Cantinho do Pito</title>
-    </head>
-    <body>
-        <h1>Bora Pitar</h1>
-    </body>
+  <head>
+    <title>Cantinho do Pito</title>
+  </head>
+  <body>
+  <h1> E o pito? </h1>
+  </body>
 </html>
