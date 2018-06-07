@@ -1,9 +1,9 @@
 package Model;
 
-public class Cities {
+public class Category {
     private int id;
     private String name;
-    private int stateId;
+    private String description;
 
     public int getId() {
         return id;
@@ -21,11 +21,11 @@ public class Cities {
         this.name = name;
     }
 
-    public int getStateId() {
-        return stateId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStateId(int stateId) {
-        this.stateId = stateId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

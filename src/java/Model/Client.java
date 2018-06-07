@@ -2,7 +2,7 @@ package Model;
 
 import java.sql.Date;
 
-public class Clients {
+public class Client {
     private int id;
     private String email;
     private String name;
