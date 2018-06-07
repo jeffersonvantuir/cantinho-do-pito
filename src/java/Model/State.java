@@ -1,6 +1,6 @@
 package Model;
 
-public class States {
+public class State {
     private int id;
     private String name;
     private String uf;
