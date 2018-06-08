@@ -1,0 +1,78 @@
+CREATE DATABASE cantinho_do_pito_db;
+USE cantinho_do_pito_db;
+
+CREATE TABLE states (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	uf CHAR(2) NOT NULL,
+	CONSTRAINT pk_states PRIMARY KEY (id)
+);
+
+CREATE TABLE cities (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	state_id INTEGER NOT NULL,
+	CONSTRAINT pk_cities PRIMARY KEY (id),
+	CONSTRAINT fk_states_cities FOREIGN KEY (state_id) REFERENCES states(id)
+);
+
+CREATE TABLE address (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+	address VARCHAR(255) NOT NULL,
+	zipcode VARCHAR(20) NOT NULL,
+	complement VARCHAR(255),
+	district VARCHAR(255),
+	city_id INTEGER NOT NULL,
+	CONSTRAINT pk_address PRIMARY KEY (ID),
+	CONSTRAINT fk_cities_address FOREIGN KEY (city_id) REFERENCES cities(id)
+);
+
+CREATE TABLE clients (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	cellphone VARCHAR(20) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	birthday DATE,
+	address VARCHAR(255) NOT NULL,
+	zipcode VARCHAR(20) NOT NULL,
+	home_number INTEGER,
+	complement VARCHAR(255),
+	district VARCHAR(255),
+	city_id INTEGER NOT NULL,
+	CONSTRAINT pk_clients PRIMARY KEY (id),
+	CONSTRAINT fk_cities_clients FOREIGN KEY (city_id) REFERENCES cities(id)
+);
+
+CREATE TABLE categories (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+    	name VARCHAR(255) NOT NULL,
+	description VARCHAR(255) NOT NULL,
+	CONSTRAINT pk_products PRIMARY KEY (id)
+);
+
+CREATE TABLE products (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+	name VARCHAR(255) NOT NULL,
+        description VARCHAR(255) NOT NULL,
+        price DECIMAL(7,2) NOT NULL,
+        stock INTEGER NOT NULL,
+        image VARCHAR(255) NOT NULL,
+        category_id INTEGER NOT NULL,
+	CONSTRAINT pk_products PRIMARY KEY (id),
+	CONSTRAINT fk_categories_products FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+CREATE TABLE buy (
+	id INTEGER AUTO_INCREMENT NOT NULL,
+	aumount INTEGER NOT NULL,
+	date DATE NOT NULL,
+	client_id INTEGER NOT NULL,
+	address_id INTEGER NOT NULL,
+	product_id INTEGER,
+	CONSTRAINT pk_buy PRIMARY KEY (ID),
+	CONSTRAINT fk_clients_buy FOREIGN KEY (client_id) REFERENCES clients(id),
+  	CONSTRAINT fk_clients_address FOREIGN KEY (address_id) REFERENCES address(id),
+	CONSTRAINT fk_clients_products FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
