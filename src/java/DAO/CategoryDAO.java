@@ -26,7 +26,7 @@ public class CategoryDAO {
         }
     }
     
-    public List list()
+    public List index()
     {
        try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM categories");
