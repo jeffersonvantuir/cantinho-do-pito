@@ -16,9 +16,27 @@
     </head>
     <body>
         <div class="row">
-            <div class="col s12 m6 m6">
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text">
+            <%
+                String success = String.valueOf(request.getAttribute("success"));
+                String error = String.valueOf(request.getAttribute("error"));
+                if (!success.equals("null")) {
+            %>
+            <div class="col s12 m12 l12 blue" id="flash">
+                <p class="center"><%= success%></p>
+            </div>
+            <%
+            } else if (!error.equals("null")) {
+            %>
+            <div class="col s12 m12 l12 red" id="flash">
+                <p class="center"><%= error%></p>
+            </div>
+            <%
+                }
+            %>
+            <div class="col s12 m6 offset-m3 l6 offset-l3">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Categorias</span>
                         <table class="striped">
                             <thead>
                                 <tr>
@@ -35,11 +53,11 @@
                                         Category category = (Category) i.next();
                                 %>
                                 <tr>
-                                    <td><%= category.getId()%></td>
                                     <td><%= category.getName()%></td>
+                                    <td><%= category.getDescription()%></td>
                                     <td>
-                                        <a href="">Editar</a>
-                                        <a href="">Excluir</a>
+                                        <a href="categories?action=request-edit&id=<%= category.getId()%>">Editar</a>&nbsp&nbsp
+                                        <a href="categories?action=delete&id=<%= category.getId()%>"  onclick="return confirm('Deseja excluir a categoria <%= category.getName()%>?')">Excluir</a>&nbsp&nbsp
                                     </td>
                                 </tr>
                                 <% }%>
@@ -50,3 +68,8 @@
             </div>
     </body>
 </html>
+<script>
+    $("#flash").click(function () {
+        $("#flash").addClass("hiddendiv")
+    });
+</script>

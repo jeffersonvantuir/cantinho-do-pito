@@ -29,7 +29,7 @@ public class CategoryDAO {
     public List index()
     {
        try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM categories");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM categories ORDER BY NAME");
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -55,14 +55,13 @@ public class CategoryDAO {
         }
     }
     
-    public boolean insert(Category category)
+    public boolean add(Category category)
     {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO categories (id, name, description) VALUES (?, ?, ?)");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
 
-            pstmt.setInt(1, category.getId());
-            pstmt.setString(2, category.getName());
-            pstmt.setString(3, category.getDescription());
+            pstmt.setString(1, category.getName());
+            pstmt.setString(2, category.getDescription());
             pstmt.executeUpdate();
             pstmt.close();
             return true;
@@ -72,7 +71,7 @@ public class CategoryDAO {
         }
     }
     
-    public boolean update(Category category)
+    public boolean edit(Category category)
     {
         try {
             PreparedStatement pstmt = conn.prepareStatement("UPDATE categories SET name = ?, description = ? WHERE id = ?");

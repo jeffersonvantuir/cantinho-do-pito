@@ -12,10 +12,10 @@ import java.util.List;
  *
  * @author jefferson
  */
-public class ClientDAO {
+public class StateDAO {
     private Connection conn;
     
-    public ClientDAO()
+    public StateDAO()
     {
         try {
             this.conn = ConnectionFactory.getConnection();

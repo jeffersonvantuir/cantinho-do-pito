@@ -14,7 +14,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CategoriesController</servlet-name>
-        <url-pattern>/CategoriesController</url-pattern>
+        <url-pattern>/categories</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
