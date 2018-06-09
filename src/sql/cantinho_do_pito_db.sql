@@ -47,7 +47,7 @@ CREATE TABLE clients (
 
 CREATE TABLE categories (
 	id INTEGER AUTO_INCREMENT NOT NULL,
-    	name VARCHAR(255) NOT NULL,
+	name VARCHAR(255) NOT NULL,
 	description VARCHAR(255) NOT NULL,
 	CONSTRAINT pk_products PRIMARY KEY (id)
 );
@@ -55,11 +55,11 @@ CREATE TABLE categories (
 CREATE TABLE products (
 	id INTEGER AUTO_INCREMENT NOT NULL,
 	name VARCHAR(255) NOT NULL,
-        description VARCHAR(255) NOT NULL,
-        price DECIMAL(7,2) NOT NULL,
-        stock INTEGER NOT NULL,
-        image VARCHAR(255) NOT NULL,
-        category_id INTEGER NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    price DECIMAL(7,2) NOT NULL,
+    stock INTEGER NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    category_id INTEGER NOT NULL,
 	CONSTRAINT pk_products PRIMARY KEY (id),
 	CONSTRAINT fk_categories_products FOREIGN KEY (category_id) REFERENCES categories(id)
 );
