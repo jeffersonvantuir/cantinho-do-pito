@@ -1,6 +1,7 @@
+
 package DAO;
 
-import Model.Client;
+import Model.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,12 +11,12 @@ import java.util.List;
 
 /**
  *
- * @author jefferson
+ * @author ricardo
  */
-public class StateDAO {
+public class CategoryDAO {
     private Connection conn;
     
-    public StateDAO()
+    public CategoryDAO()
     {
         try {
             this.conn = ConnectionFactory.getConnection();
@@ -25,27 +26,28 @@ public class StateDAO {
         }
     }
     
-    public List list()
+    public List index()
     {
        try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM categories ORDER BY NAME");
 
             ResultSet rs = pstmt.executeQuery();
 
-            List<Client> listClients = new ArrayList<Client>();
+            List<Category> listCategories = new ArrayList<Category>();
 
             while (rs.next()) {
-                Client client = new Client();
+                Category client = new Category();
                 client.setId(rs.getInt("id"));
                 client.setName(rs.getString("name"));
+                client.setDescription(rs.getString("description"));
 
-                listClients.add(client);
+                listCategories.add(client);
             }
 
             pstmt.close();
             rs.close();
 
-            return listClients;
+            return listCategories;
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -53,12 +55,13 @@ public class StateDAO {
         }
     }
     
-    public boolean insert(Client client)
+    public boolean add(Category category)
     {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO clients (id) VALUES (?)");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
 
-            pstmt.setInt(1, client.getId());
+            pstmt.setString(1, category.getName());
+            pstmt.setString(2, category.getDescription());
             pstmt.executeUpdate();
             pstmt.close();
             return true;
@@ -68,13 +71,14 @@ public class StateDAO {
         }
     }
     
-    public boolean update(Client client)
+    public boolean edit(Category category)
     {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE clients SET name = ? WHERE id = ?");
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE categories SET name = ?, description = ? WHERE id = ?");
 
-            pstmt.setString(1, client.getName());
-            pstmt.setInt(2, client.getId());
+            pstmt.setString(1, category.getName());
+            pstmt.setString(2, category.getDescription());
+            pstmt.setInt(3, category.getId());
             pstmt.executeUpdate();
             pstmt.close();
             return true;
@@ -84,24 +88,25 @@ public class StateDAO {
         }
     }
     
-    public Client view(int id)
+    public Category view(int id)
     {
        try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients WHERE id = ?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM categories WHERE id = ?");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
-            Client client = new Client();
+            Category category = new Category();
 
             while (rs.next()) {
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                category.setDescription(rs.getString("description"));
             }
 
             pstmt.close();
             rs.close();
 
-            return client;
+            return category;
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -109,12 +114,12 @@ public class StateDAO {
         }
     }
     
-    public boolean delete(Client client)
+    public boolean delete(Category categories)
     {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM clients WHERE id = ?");
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM categories WHERE id = ?");
 
-            pstmt.setInt(1, client.getId());
+            pstmt.setInt(1, categories.getId());
             pstmt.executeUpdate();
             pstmt.close();
             return true;
