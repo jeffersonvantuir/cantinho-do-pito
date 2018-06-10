@@ -1,6 +1,7 @@
 package DAO;
 
-import Model.Client;
+import Model.City;
+import Model.State;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,10 +13,10 @@ import java.util.List;
  *
  * @author jefferson
  */
-public class ClientDAO {
+public class CityDAO {
     private Connection conn;
     
-    public ClientDAO()
+    public CityDAO()
     {
         try {
             this.conn = ConnectionFactory.getConnection();
@@ -25,27 +26,27 @@ public class ClientDAO {
         }
     }
     
-    public List list()
+    public List list(State state)
     {
        try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients");
-
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM cities WHERE state_id = ? ORDER BY name ASC");
+            pstmt.setInt(1, state.getId());
             ResultSet rs = pstmt.executeQuery();
 
-            List<Client> listClients = new ArrayList<Client>();
+            List<City> listCities = new ArrayList<City>();
 
             while (rs.next()) {
-                Client client = new Client();
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
+                City city = new City();
+                city.setId(rs.getInt("id"));
+                city.setName(rs.getString("name"));
 
-                listClients.add(client);
+                listCities.add(city);
             }
 
             pstmt.close();
             rs.close();
 
-            return listClients;
+            return listCities;
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -53,74 +54,27 @@ public class ClientDAO {
         }
     }
     
-    public boolean insert(Client client)
+    public int getStateIdByCityId(int id)
     {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO clients (id) VALUES (?)");
-
-            pstmt.setInt(1, client.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-            return true;
-        } catch (SQLException e) {
-           e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean update(Client client)
-    {
-        try {
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE clients SET name = ? WHERE id = ?");
-
-            pstmt.setString(1, client.getName());
-            pstmt.setInt(2, client.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-            return true;
-        } catch (SQLException e) {
-           e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public Client view(int id)
-    {
-       try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients WHERE id = ?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT s.id as state_id FROM states s, cities c WHERE s.id = c.state_id AND c.id = ?");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
-            Client client = new Client();
-
+            int state_id = 0;
             while (rs.next()) {
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
+                state_id = rs.getInt("state_id");
             }
-
+            
             pstmt.close();
             rs.close();
-
-            return client;
-
+            
+            return state_id;
+            
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
-            return null;
         }
-    }
-    
-    public boolean delete(Client client)
-    {
-        try {
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM clients WHERE id = ?");
-
-            pstmt.setInt(1, client.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-            return true;
-        } catch (SQLException e) {
-           e.printStackTrace();
-            return false;
-        }
+        
+        return 0;
     }
 }

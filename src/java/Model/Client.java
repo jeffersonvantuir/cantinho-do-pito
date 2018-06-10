@@ -1,19 +1,51 @@
 package Model;
 
+import Helpers.Helper;
 import java.sql.Date;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Client {
     private int id;
     private String email;
     private String name;
     private String password;
-    private Date birthday;
+    private String cpf;
+    private int homeNumber;
+    private String cellphone;
+     private String birthday;
     private String address;
     private String zipcode;
     private String complement;
     private String district;
     private int cityId;
+    private Helper helper = new Helper();
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public int getHomeNumber() {
+        return homeNumber;
+    }
+
+    public void setHomeNumber(int homeNumber) {
+        this.homeNumber = homeNumber;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
+    }
+   
     public int getId() {
         return id;
     }
@@ -46,11 +78,11 @@ public class Client {
         this.password = password;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public String getBirthday() {
+        return this.birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
