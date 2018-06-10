@@ -41,6 +41,7 @@ CREATE TABLE clients (
 	complement VARCHAR(255),
 	district VARCHAR(255),
 	city_id INTEGER NOT NULL,
+	is_admin BOOLEAN DEFAULT FALSE,
 	CONSTRAINT pk_clients PRIMARY KEY (id),
 	CONSTRAINT fk_cities_clients FOREIGN KEY (city_id) REFERENCES cities(id)
 );
