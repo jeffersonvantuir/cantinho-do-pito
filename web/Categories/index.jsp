@@ -15,25 +15,26 @@
         <jsp:include page="../Layout/default.jsp"/>
     </head>
     <body>
+        <jsp:include page="../Layout/navbar.jsp"/>
         <div class="row">
-            <%
-                String success = String.valueOf(request.getAttribute("success"));
-                String error = String.valueOf(request.getAttribute("error"));
-                if (!success.equals("null")) {
-            %>
-            <div class="col s12 m12 l12 blue" id="flash">
-                <p class="center"><%= success%></p>
-            </div>
-            <%
-            } else if (!error.equals("null")) {
-            %>
-            <div class="col s12 m12 l12 red" id="flash">
-                <p class="center"><%= error%></p>
-            </div>
-            <%
-                }
-            %>
-            <div class="col s12 m6 offset-m3 l6 offset-l3">
+            <jsp:include page="../Layout/flash.jsp"/>
+            <ul id="slide-out" class="sidenav">
+                <li><div class="user-view">
+                        <div class="background">
+                            <img src="/cantinho-do-pito/resources/img/fundo.jpg">
+                        </div>
+                        <h5 class="white-text">Cantinho do Pito</h5>
+                        <h6 class="white-text">Categorias</h6>
+                        <br>
+                    </div></li>
+                    <li><a><i class="material-icons">send</i>Ações</a></li>
+                <li><div class="divider"></div></li>
+                <li>
+                    <a href="categories?action=request-add" class="waves-effect"><i class="material-icons">add</i>Adicionar Categoria</a>
+                </li>
+            </ul>
+            
+            <div class="col s12 m6 offset-s3 l6 offset-l3">
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Categorias</span>
@@ -68,8 +69,3 @@
             </div>
     </body>
 </html>
-<script>
-    $("#flash").click(function () {
-        $("#flash").addClass("hiddendiv")
-    });
-</script>

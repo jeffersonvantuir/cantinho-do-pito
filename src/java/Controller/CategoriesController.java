@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -53,7 +54,8 @@ public class CategoriesController extends HttpServlet {
                 rd.forward(request, response);
                 break;
             case "edit":
-                category.setId(Integer.parseInt(request.getParameter("id")));
+                HttpSession session = request.getSession();
+                category.setId(Integer.parseInt(String.valueOf(session.getAttribute("id"))));
                 category.setName(request.getParameter("name"));
                 category.setDescription(request.getParameter("description"));
 
