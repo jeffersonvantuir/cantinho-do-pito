@@ -1,7 +1,9 @@
 package DAO;
 
 import Helpers.Helper;
+import Model.City;
 import Model.Client;
+import Model.State;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +35,9 @@ public class ClientDAO {
     public List index()
     {
        try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients");
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT cl.*, ci.*, st.* FROM clients cl, cities ci, states st "
+                            + "WHERE ci.id = cl.city_id AND ci.state_id = st.id;");
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -41,9 +45,37 @@ public class ClientDAO {
 
             while (rs.next()) {
                 Client client = new Client();
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
+                City city = new City();
+                State state = new State();
+                
+                client.setId(rs.getInt("cl.id"));
+                client.setName(rs.getString("cl.name"));
+                client.setEmail(rs.getString("cl.email"));
+                client.setCpf(rs.getString("cl.cpf"));
+                client.setCellphone(rs.getString("cl.cellphone"));
+                client.setPassword(rs.getString("cl.password"));
+                try {
+                    client.setBirthday(helper.formatterDateUsage(rs.getString("cl.birthday")));
+                } catch (ParseException ex) {
+                    Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                client.setAddress(rs.getString("cl.address"));
+                client.setZipcode(rs.getString("cl.zipcode"));
+                client.setHomeNumber(Integer.parseInt(rs.getString("cl.home_number")));
+                client.setComplement(rs.getString("cl.complement"));
+                client.setDistrict(rs.getString("cl.district"));
+                
+                state.setId(rs.getInt("st.id"));
+                state.setName(rs.getString("st.name"));
+                state.setUf(rs.getString("st.uf"));
+                
+                city.setId(rs.getInt("ci.id"));
+                city.setName(rs.getString("ci.name"));
+                city.setStateId(rs.getInt("ci.state_id"));
 
+                city.setState(state);
+                client.setCity(city);
+                
                 listClients.add(client);
             }
 
@@ -166,7 +198,6 @@ public class ClientDAO {
     {
         try {
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM clients WHERE id = ?");
-
             pstmt.setInt(1, client.getId());
             pstmt.executeUpdate();
             pstmt.close();

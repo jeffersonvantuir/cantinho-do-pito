@@ -26,7 +26,6 @@ import javax.servlet.http.HttpSession;
  */
 public class ClientsController extends HttpServlet {
     
-    private Client client;
     private List listStates;
     
 protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {
@@ -38,6 +37,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         Helper helper = new Helper();
         HttpSession session = request.getSession();
 
+        if (action == null) {
+            action = "";
+        }
         switch (action) {
             case "request-add":
                 listStates = stateDAO.list();
@@ -51,7 +53,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 if (!clientDAO.cpfAlready(0, request.getParameter("cpf"))) {
                     if (!clientDAO.emailAlready(0, request.getParameter("email"))) {
                         if (clientDAO.passwordMathConfirmPassword(request.getParameter("password"), request.getParameter("confirm_password"))) {
-                            client = new Client();
+                            Client client = new Client();
                             client.setName(request.getParameter("name"));
                             client.setEmail(request.getParameter("email"));
                             client.setCpf(clientDAO.removeMaskCPF(request.getParameter("cpf")));
@@ -120,7 +122,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 
             case "request-edit":
                 listStates = stateDAO.list();
-                client = clientDAO.view(Integer.parseInt(request.getParameter("id")));
+                
+                Client client = clientDAO.view(Integer.parseInt(request.getParameter("id")));
                 State stateSelect = new State();
                 stateSelect.setId(cityDAO.getStateIdByCityId(client.getCityId()));
 
@@ -132,6 +135,12 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 break;
                 
             case "edit":
+                
+                if (session.getAttribute("id") == null || session.getAttribute("id").equals("")) {
+                    rd = request.getRequestDispatcher("clients?action=null");
+                    rd.forward(request, response);
+                }
+                
                 int id = Integer.parseInt(String.valueOf(session.getAttribute("id")));
                 
                 if (!clientDAO.cpfAlready(id, request.getParameter("cpf"))) {
@@ -163,13 +172,14 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                         client.setCityId(Integer.parseInt(request.getParameter("city")));
 
                         if (clientDAO.edit(client)) {
-                            System.out.println("EDITADO COM SUCESSO");
-                            request.setAttribute("success", "Dados do Cliente atualizados com sucesso.");
-                            rd = request.getRequestDispatcher("clients?action=index");
+                            session.setAttribute("id", null);
+                            request.setAttribute("success", "Cliente editado com sucesso.");
+                            rd = request.getRequestDispatcher("clients?action=null");
                             rd.forward(request, response);
                         } else {
-                            request.setAttribute("error", "Falha ao atualizar dados do cliente. Tente novamente.");
-                            rd = request.getRequestDispatcher("clients?action=index");
+                            session.setAttribute("id", null);
+                            request.setAttribute("error", "Falha ao editar cliente. Tente novamente.");
+                            rd = request.getRequestDispatcher("clients?action=null");
                             rd.forward(request, response);
                         }
                     } else {
@@ -184,7 +194,19 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 }
                 break;
             
-            case "index":
+            case "delete":
+                client = clientDAO.view(Integer.parseInt(request.getParameter("id")));
+                
+                if (clientDAO.delete(client)) {
+                    request.setAttribute("success", "Cliente excluído com sucesso.");
+                } else {
+                    request.setAttribute("error", "Falha ao excluir cliente. Tente novamente.");
+                }
+                rd = request.getRequestDispatcher("clients?action=null");
+                rd.forward(request, response);
+                break;
+                
+            default:
                 List listClients = clientDAO.index();
                 
                 request.setAttribute("listClients", listClients);

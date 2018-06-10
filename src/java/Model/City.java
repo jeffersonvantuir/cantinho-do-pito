@@ -4,6 +4,15 @@ public class City {
     private int id;
     private String name;
     private int stateId;
+    private State state;
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
 
     public int getId() {
         return id;

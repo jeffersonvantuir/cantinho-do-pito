@@ -1,10 +1,6 @@
 package Model;
 
 import Helpers.Helper;
-import java.sql.Date;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Client {
     private int id;
@@ -21,6 +17,15 @@ public class Client {
     private String district;
     private int cityId;
     private Helper helper = new Helper();
+    private City city;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     public String getCpf() {
         return cpf;
