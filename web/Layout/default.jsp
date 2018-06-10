@@ -74,7 +74,7 @@
         }
         var options = {
             container: 'body',
-            format: 'dd/mm/yyyy',
+            format: 'dd-mm-yyyy',
             showDaysInNextAndPreviousMonths: true,
             i18n: datepicker_pt_br,
         }
