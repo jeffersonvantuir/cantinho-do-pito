@@ -34,12 +34,12 @@ public class CategoriesController extends HttpServlet {
                 rd = request.getRequestDispatcher("Categories/add.jsp");
                 rd.forward(request, response);
                 break;
+                
             case "add":
                 category.setName(request.getParameter("name"));
                 category.setDescription(request.getParameter("description"));
 
-                boolean addCategories = categoryDAO.add(category);
-                if (addCategories) {
+                if (categoryDAO.add(category)) {
                     request.setAttribute("success", "Categoria cadastrada com sucesso.");
                 } else {
                     request.setAttribute("error", "Falha ao casdastrar categoria. Tente novamente.");
@@ -47,20 +47,21 @@ public class CategoriesController extends HttpServlet {
                 rd = request.getRequestDispatcher("categories?action=null");
                 rd.forward(request, response);
                 break;
+                
             case "request-edit":
                 category = categoryDAO.view(Integer.parseInt(request.getParameter("id")));
                 request.setAttribute("categoryEdit", category);
                 rd = request.getRequestDispatcher("Categories/edit.jsp");
                 rd.forward(request, response);
                 break;
+                
             case "edit":
                 HttpSession session = request.getSession();
                 category.setId(Integer.parseInt(String.valueOf(session.getAttribute("id"))));
                 category.setName(request.getParameter("name"));
                 category.setDescription(request.getParameter("description"));
 
-                boolean editCategories = categoryDAO.edit(category);
-                if (editCategories) {
+                if (categoryDAO.edit(category)) {
                     request.setAttribute("success", "Categoria editada com sucesso.");
                 } else {
                     request.setAttribute("error", "Falha ao editar categoria. Tente novamente.");
@@ -68,21 +69,22 @@ public class CategoriesController extends HttpServlet {
                 rd = request.getRequestDispatcher("categories?action=null");
                 rd.forward(request, response);
                 break;
+                
             case "delete":
                 category.setId(Integer.parseInt(request.getParameter("id")));
-                boolean deleteCategories = categoryDAO.delete(category);
 
-                if (deleteCategories) {
-                    request.setAttribute("success", "Categoria deletada com sucesso.");
+                if (categoryDAO.delete(category)) {
+                    request.setAttribute("success", "Categoria excluída com sucesso.");
                 } else {
-                    request.setAttribute("error", "Falha ao deletar categoria. Tente novamente.");
+                    request.setAttribute("error", "Falha ao excluir categoria. Tente novamente.");
                 }
+                
                 rd = request.getRequestDispatcher("categories?action=null");
                 rd.forward(request, response);
                 break;
             default:
-                List indexCategories = categoryDAO.index();
-                request.setAttribute("indexCategories", indexCategories);
+                List listCategories = categoryDAO.index();
+                request.setAttribute("listCategories", listCategories);
                 rd = request.getRequestDispatcher("Categories/index.jsp");
                 rd.forward(request, response);
                 break;

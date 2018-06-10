@@ -34,8 +34,8 @@
                                 </thead>
                                 <tbody>
                                     <%
-                                        List<Category> listaDeClientes = (List<Category>) request.getAttribute("indexCategories");
-                                        Iterator i = listaDeClientes.iterator();
+                                        List<Category> listCategories = (List<Category>) request.getAttribute("listCategories");
+                                        Iterator i = listCategories.iterator();
                                         while (i.hasNext()) {
                                             Category category = (Category) i.next();
                                     %>

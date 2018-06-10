@@ -1,6 +1,6 @@
 package DAO;
 
-import Model.Client;
+import Model.State;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,99 +28,27 @@ public class StateDAO {
     public List list()
     {
        try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients");
-
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM states ORDER BY name");
             ResultSet rs = pstmt.executeQuery();
 
-            List<Client> listClients = new ArrayList<Client>();
+            List<State> listStates = new ArrayList<State>();
 
             while (rs.next()) {
-                Client client = new Client();
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
+                State state = new State();
+                state.setId(rs.getInt("id"));
+                state.setName(rs.getString("name"));
 
-                listClients.add(client);
+                listStates.add(state);
             }
 
             pstmt.close();
             rs.close();
 
-            return listClients;
+            return listStates;
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             return null;
-        }
-    }
-    
-    public boolean insert(Client client)
-    {
-        try {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO clients (id) VALUES (?)");
-
-            pstmt.setInt(1, client.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-            return true;
-        } catch (SQLException e) {
-           e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean update(Client client)
-    {
-        try {
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE clients SET name = ? WHERE id = ?");
-
-            pstmt.setString(1, client.getName());
-            pstmt.setInt(2, client.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-            return true;
-        } catch (SQLException e) {
-           e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public Client view(int id)
-    {
-       try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients WHERE id = ?");
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            Client client = new Client();
-
-            while (rs.next()) {
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
-            }
-
-            pstmt.close();
-            rs.close();
-
-            return client;
-
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
-    }
-    
-    public boolean delete(Client client)
-    {
-        try {
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM clients WHERE id = ?");
-
-            pstmt.setInt(1, client.getId());
-            pstmt.executeUpdate();
-            pstmt.close();
-            return true;
-        } catch (SQLException e) {
-           e.printStackTrace();
-            return false;
         }
     }
 }

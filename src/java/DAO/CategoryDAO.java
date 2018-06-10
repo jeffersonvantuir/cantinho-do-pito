@@ -114,12 +114,12 @@ public class CategoryDAO {
         }
     }
     
-    public boolean delete(Category categories)
+    public boolean delete(Category category)
     {
         try {
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM categories WHERE id = ?");
 
-            pstmt.setInt(1, categories.getId());
+            pstmt.setInt(1, category.getId());
             pstmt.executeUpdate();
             pstmt.close();
             return true;
