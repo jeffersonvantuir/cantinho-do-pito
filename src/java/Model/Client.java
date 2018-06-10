@@ -10,7 +10,7 @@ public class Client {
     private String cpf;
     private int homeNumber;
     private String cellphone;
-     private String birthday;
+    private String birthday;
     private String address;
     private String zipcode;
     private String complement;
@@ -18,39 +18,8 @@ public class Client {
     private int cityId;
     private Helper helper = new Helper();
     private City city;
+    private boolean isAdmin;
 
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public int getHomeNumber() {
-        return homeNumber;
-    }
-
-    public void setHomeNumber(int homeNumber) {
-        this.homeNumber = homeNumber;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
-
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
-    }
-   
     public int getId() {
         return id;
     }
@@ -83,8 +52,32 @@ public class Client {
         this.password = password;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public int getHomeNumber() {
+        return homeNumber;
+    }
+
+    public void setHomeNumber(int homeNumber) {
+        this.homeNumber = homeNumber;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
+    }
+
     public String getBirthday() {
-        return this.birthday;
+        return birthday;
     }
 
     public void setBirthday(String birthday) {
@@ -122,7 +115,7 @@ public class Client {
     public void setDistrict(String district) {
         this.district = district;
     }
-    
+
     public int getCityId() {
         return cityId;
     }
@@ -130,4 +123,22 @@ public class Client {
     public void setCityId(int cityId) {
         this.cityId = cityId;
     }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public boolean isIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    
 }

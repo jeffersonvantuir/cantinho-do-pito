@@ -8,6 +8,7 @@
 <!--Import materialize.css-->
 <link type="text/css" rel="stylesheet" href="/cantinho-do-pito/resources/css/materialize.min.css"  media="screen,projection"/>
 <link type="text/css" rel="stylesheet" href="/cantinho-do-pito/resources/css/ricardo.css"  media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="/cantinho-do-pito/resources/css/jefferson.css"  media="screen,projection"/>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -72,9 +73,20 @@
                 'Dezembro'
             ]
         }
+        
+        var date = new Date(); 
+        date.setDate(date.getDate());
+        date.setMonth(date.getMonth());
+        date.setFullYear(date.getFullYear() - 18);
+        
         var options = {
             container: 'body',
             format: 'dd-mm-yyyy',
+            yearRange: 100,
+            maxDay: date.getDay(),
+            maxMonth: date.getMonth(),
+            maxYear: date.getFullYear(),
+            showClearBtn: true,
             showDaysInNextAndPreviousMonths: true,
             i18n: datepicker_pt_br,
         }

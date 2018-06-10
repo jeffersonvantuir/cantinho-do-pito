@@ -31,25 +31,25 @@
                                 <div class="divider"></div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">account_circle</i>
-                                    <input id="name" name="name" required type="text">
+                                    <input id="name" name="name" type="text" required>
                                     <label for="name">Nome</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">email</i>
-                                    <input id="email" name="email" type="email" class="validate">
+                                    <input id="email" name="email" type="email" class="validate"  required>
                                     <label for="email">E-mail</label>
                                     <span class="helper-text" data-error="E-mail inválido">* Campo Obrigatório</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">chrome_reader_mode</i>
-                                    <input id="cpf" name="cpf" type="text">
+                                    <input id="cpf" name="cpf" type="text" required>
                                     <label for="cpf">CPF</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">local_phone</i>
-                                    <input id="cellphone" name="cellphone" type="text">
+                                    <input id="cellphone" name="cellphone" type="text" required>
                                     <label for="cellphone">Telefone</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
@@ -60,13 +60,13 @@
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">lock</i>
-                                    <input id="password" name="password" type="password">
+                                    <input id="password" name="password" type="password" required>
                                     <label for="password">Senha</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">lock</i>
-                                    <input id="confirm_password" name="confirm_password" type="password">
+                                    <input id="confirm_password" name="confirm_password" type="password" required>
                                     <label for="confirm_password">Confirmar Senha</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
@@ -78,12 +78,12 @@
                                 </h6>
                                 <div class="divider col s12"></div>
                                 <div class="input-field col s12 m6 l6">
-                                    <input id="zipcode" name="zipcode" type="text">
+                                    <input id="zipcode" name="zipcode" type="text" required>
                                     <label for="zipcode">CEP</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
-                                    <input id="address" name="address" type="text">
+                                    <input id="address" name="address" type="text" required>
                                     <label for="address">Endereço</label>
                                     <span class="helper-text">* Campo Obrigatório</span>
                                 </div>
@@ -100,7 +100,7 @@
                                     <label for="district">Bairro</label>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
-                                    <select name="state" id="state">
+                                    <select name="state" id="state" required>
                                     <%
                                         List<State> listStates = (List<State>) request.getAttribute("listStates");
                                         Iterator i = listStates.iterator();
@@ -113,7 +113,7 @@
                                     <label>Estado</label>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
-                                    <select name="city" id="city">
+                                    <select name="city" id="city" required>
                                     </select>
                                     <label>Cidade</label>
                                 </div>

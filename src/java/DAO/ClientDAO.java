@@ -32,6 +32,33 @@ public class ClientDAO {
         }
     }
     
+    public Client login(String email, String password)
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients WHERE email = ? AND password = ?;");
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+
+            Client client = new Client();
+            while (rs.next()) {
+                client.setId(rs.getInt("id"));
+                client.setName(rs.getString("name"));
+                client.setEmail(rs.getString("email"));
+                client.setIsAdmin(rs.getBoolean("is_admin"));
+            }
+
+            pstmt.close();
+            rs.close();
+            
+            return client;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }        
+    }
+    
     public List index()
     {
        try {
