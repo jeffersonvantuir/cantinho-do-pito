@@ -4,13 +4,16 @@
     Author     : ricardo
 --%>
 
-
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo right">Logo</a>
-      <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
-        <li><a href="categories">Categorias</a></li>
-      </ul>
+<header>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper black">
+                <a href="#" class="brand-logo right">Logo</a>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
+                    <li><a href="categories">Categorias</a></li>
+                </ul>
+            </div>
+        </nav>
     </div>
-  </nav>
+</header>
