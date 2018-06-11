@@ -50,7 +50,13 @@ CREATE TABLE categories (
 	id INTEGER AUTO_INCREMENT NOT NULL,
 	name VARCHAR(255) NOT NULL,
 	description VARCHAR(255) NOT NULL,
-	CONSTRAINT pk_products PRIMARY KEY (id)
+	CONSTRAINT pk_categories PRIMARY KEY (id)
+);
+
+CREATE TABLE brands (
+    id INTEGER AUTO_INCREMENT NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	CONSTRAINT pk_brands PRIMARY KEY (id)
 );
 
 CREATE TABLE products (
@@ -61,8 +67,10 @@ CREATE TABLE products (
     stock INTEGER NOT NULL,
     image VARCHAR(255) NOT NULL,
     category_id INTEGER NOT NULL,
+    brand_id INTEGER NOT NULL,
 	CONSTRAINT pk_products PRIMARY KEY (id),
-	CONSTRAINT fk_categories_products FOREIGN KEY (category_id) REFERENCES categories(id)
+	CONSTRAINT fk_categories_products FOREIGN KEY (category_id) REFERENCES categories(id),
+	CONSTRAINT fk_brands_products FOREIGN KEY (brand_id) REFERENCES brands(id)
 );
 
 CREATE TABLE buy (
