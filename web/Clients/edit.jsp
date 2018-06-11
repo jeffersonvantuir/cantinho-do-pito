@@ -123,11 +123,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <button class="btn waves-effect waves-light right col s12 m6 offset-m5 l4 offset-l7" type="submit" name="action">Cadastrar
+                                <button class="btn waves-effect waves-light right black col s12 m6 offset-m5 l4 offset-l7" type="submit" name="action">Cadastrar
                                     <i class="material-icons right">send</i>
                                 </button>    
                             </div>
-                            
                         </form>
                     </div>
                 </div>
