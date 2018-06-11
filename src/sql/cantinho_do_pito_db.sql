@@ -75,11 +75,11 @@ CREATE TABLE products (
 
 CREATE TABLE buy (
 	id INTEGER AUTO_INCREMENT NOT NULL,
-	aumount INTEGER NOT NULL,
+	amount INTEGER NOT NULL,
 	date DATE NOT NULL,
 	client_id INTEGER NOT NULL,
 	address_id INTEGER NOT NULL,
-	product_id INTEGER,
+	product_id INTEGER NOT NULL,
 	CONSTRAINT pk_buy PRIMARY KEY (ID),
 	CONSTRAINT fk_clients_buy FOREIGN KEY (client_id) REFERENCES clients(id),
   	CONSTRAINT fk_clients_address FOREIGN KEY (address_id) REFERENCES address(id),
