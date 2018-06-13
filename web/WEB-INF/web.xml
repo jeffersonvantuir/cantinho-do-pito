@@ -8,13 +8,22 @@
         <servlet-name>CategoriesController</servlet-name>
         <servlet-class>Controller.CategoriesController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductsController</servlet-name>
+        <servlet-class>Controller.ProductsController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ClientsController</servlet-name>
-        <url-pattern>/ClientsController</url-pattern>
+        <url-pattern>/clients</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CategoriesController</servlet-name>
         <url-pattern>/categories</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ProductsController</servlet-name>
+        <url-pattern>/products</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
