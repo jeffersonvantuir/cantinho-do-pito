@@ -4,11 +4,11 @@
     Author     : jefferson
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Entrar</title>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
@@ -24,7 +24,7 @@
                                 <div class="row">
                                     <h6>
                                         <i class="material-icons">person</i>
-                                        FaÃ§a login
+                                        Faça login
                                     </h6>
                                     <div class="divider"></div>
                                     <div class="input-field col s12">

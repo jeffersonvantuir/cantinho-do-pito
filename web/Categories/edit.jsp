@@ -7,11 +7,11 @@
 <%@ page import="Model.Category" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Editar Categoria</title>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
@@ -39,13 +39,13 @@
                                         <i class="material-icons prefix">assignment_turned_in</i>
                                         <input id="name" name="name" type="text" value="<%=category.getName()%>" required>
                                         <label for="name">Nome</label>
-                                        <span class="helper-text">* Campo ObrigatÃ³rio</span>
+                                        <span class="helper-text">* Campo Obrigatório</span>
                                     </div>
                                     <div class="input-field col s12 m12 l12">
                                         <i class="material-icons prefix">descriptiont</i>
                                         <textarea id="icon_prefix2" class="materialize-textarea" name="description" required><%=category.getDescription()%></textarea>
-                                        <label for="icon_prefix2">DescriÃ§Ã£o</label>
-                                        <span class="helper-text">* Campo ObrigatÃ³rio</span>
+                                        <label for="icon_prefix2">Descrição</label>
+                                        <span class="helper-text">* Campo Obrigatório</span>
                                     </div>
                                     <br>
                                     <button class="btn waves-effect waves-light right black" type="submit" name="action">Enviar

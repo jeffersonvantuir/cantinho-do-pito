@@ -8,7 +8,6 @@ import Model.Client;
 import Model.State;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,7 +28,10 @@ public class ClientsController extends HttpServlet {
     private List listStates;
     private Client client;
     
-protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {
+protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException, NoSuchAlgorithmException {
+        
+        response.setContentType("text/html;charset=ISO-8859-1");
         String action = request.getParameter("action");
         RequestDispatcher rd = null;
         ClientDAO clientDAO = new ClientDAO();

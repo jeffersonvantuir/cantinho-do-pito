@@ -9,11 +9,11 @@
 <%@page import="Model.State"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Editar Cliente</title>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
@@ -38,25 +38,25 @@
                                     <i class="material-icons prefix">account_circle</i>
                                     <input id="name" name="name" required type="text" value="<%= client.getName() %>">
                                     <label for="name">Nome</label>
-                                    <span class="helper-text">* Campo Obrigat贸rio</span>
+                                    <span class="helper-text">* Campo Obrigat髍io</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">email</i>
                                     <input id="email" name="email" type="email" class="validate" required value="<%= client.getEmail() %>">
                                     <label for="email">E-mail</label>
-                                    <span class="helper-text" data-error="E-mail inv谩lido">* Campo Obrigat贸rio</span>
+                                    <span class="helper-text" data-error="E-mail inv醠ido">* Campo Obrigat髍io</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">chrome_reader_mode</i>
                                     <input id="cpf" name="cpf" type="text" required value="<%= client.getCpf() %>">
                                     <label for="cpf">CPF</label>
-                                    <span class="helper-text">* Campo Obrigat贸rio</span>
+                                    <span class="helper-text">* Campo Obrigat髍io</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">local_phone</i>
                                     <input id="cellphone" name="cellphone" type="text" required value="<%= client.getCellphone() %>">
                                     <label for="cellphone">Telefone</label>
-                                    <span class="helper-text">* Campo Obrigat贸rio</span>
+                                    <span class="helper-text">* Campo Obrigat髍io</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <i class="material-icons prefix">date_range</i>
@@ -67,22 +67,22 @@
                             <div class="row">
                                 <h6 class="col s12">
                                     <i class="material-icons">location_city</i>
-                                    Endere莽o
+                                    Endere鏾
                                 </h6>
                                 <div class="divider col s12"></div>
                                 <div class="input-field col s12 m6 l6">
                                     <input id="zipcode" name="zipcode" type="text" required value="<%= client.getZipcode() %>">
                                     <label for="zipcode">CEP</label>
-                                    <span class="helper-text">* Campo Obrigat贸rio</span>
+                                    <span class="helper-text">* Campo Obrigat髍io</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <input id="address" name="address" type="text" required value="<%= client.getAddress() %>">
-                                    <label for="address">Endere莽o</label>
-                                    <span class="helper-text">* Campo Obrigat贸rio</span>
+                                    <label for="address">Endere鏾</label>
+                                    <span class="helper-text">* Campo Obrigat髍io</span>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <input id="number" name="home_number" type="number" value="<%= client.getHomeNumber() %>">
-                                    <label for="number">N煤mero</label>
+                                    <label for="number">N鷐ero</label>
                                 </div>
                                 <div class="input-field col s12 m6 l6">
                                     <input id="complement" name="complement" type="text" value="<%= client.getComplement() %>">

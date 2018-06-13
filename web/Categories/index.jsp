@@ -6,11 +6,11 @@
 <%@ page import="Model.Category" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Categorias</title>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
@@ -28,8 +28,8 @@
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
-                                        <th>DescriÃ§Ã£o</th>
-                                        <th>AÃ§Ãµes</th>
+                                        <th>Descrição</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>

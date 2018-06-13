@@ -6,11 +6,11 @@
 <%@ page import="Model.Client" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Clientes</title>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
@@ -31,9 +31,9 @@
                                         <th>E-mail</th>
                                         <th>CPF</th>
                                         <th>Telefone</th>
-                                        <th>EndereÃ§o</th>
+                                        <th>Endereço</th>
                                         <th>Cidade - UF</th>
-                                        <th>AÃ§Ãµes</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
