@@ -1,4 +1,7 @@
 /build/
 /.git/
 /nbproject/*
+/nbproject/
+/nbproject
+nbproject
 /dist/
