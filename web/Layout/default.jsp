@@ -18,6 +18,10 @@
 <script type="text/javascript" src="/cantinho-do-pito/resources/js/jquery.mask.js"></script>
 
 <script>
+    $(document).ready(function(){
+        $('.materialboxed').materialbox();
+    });
+  
     $(document).ready(function () {
         $('select').formSelect();
         $('#zipcode').mask('00000-000');
