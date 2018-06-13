@@ -23,7 +23,7 @@ CREATE TABLE address (
 	complement VARCHAR(255),
 	district VARCHAR(255),
 	city_id INTEGER NOT NULL,
-	CONSTRAINT pk_address PRIMARY KEY (ID),
+	CONSTRAINT pk_address PRIMARY KEY (id),
 	CONSTRAINT fk_cities_address FOREIGN KEY (city_id) REFERENCES cities(id)
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE brands (
 CREATE TABLE products (
 	id INTEGER AUTO_INCREMENT NOT NULL,
 	name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
     price DECIMAL(7,2) NOT NULL,
     stock INTEGER NOT NULL,
     image VARCHAR(255) NOT NULL,
@@ -75,14 +75,32 @@ CREATE TABLE products (
 
 CREATE TABLE buy (
 	id INTEGER AUTO_INCREMENT NOT NULL,
+	uuid char(36) NOT NULL,
 	amount INTEGER NOT NULL,
+	total_price DECIMAL(7,2) NOT NULL,
 	date DATE NOT NULL,
 	client_id INTEGER NOT NULL,
 	address_id INTEGER NOT NULL,
-	product_id INTEGER NOT NULL,
-	CONSTRAINT pk_buy PRIMARY KEY (ID),
+	product_id INTEGER NOT NULL, 
+	CONSTRAINT pk_buy PRIMARY KEY (id),
 	CONSTRAINT fk_clients_buy FOREIGN KEY (client_id) REFERENCES clients(id),
-  	CONSTRAINT fk_clients_address FOREIGN KEY (address_id) REFERENCES address(id),
-	CONSTRAINT fk_clients_products FOREIGN KEY (product_id) REFERENCES products(id)
+  	CONSTRAINT fk_address_buy FOREIGN KEY (address_id) REFERENCES address(id),
+  	CONSTRAINT fk_products_buy FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+DELIMITER $$
+CREATE TRIGGER stock_update AFTER INSERT ON buy
+FOR EACH ROW
+BEGIN
+	IF ((SELECT stock FROM products WHERE id=NEW.product_id) >= NEW.amount)
+	THEN
+		UPDATE products pr
+			SET pr.stock = pr.stock - NEW.amount
+			WHERE pr.id = NEW.product_id;
+	ELSE 
+		DELETE FROM buy WHERE id = NEW.id;
+		SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'Solicitação de produto em maior quantidade que o estoque!';
+	END IF;
+END;
+$$
+DELIMITER ;
