@@ -1,7 +1,7 @@
 /build/
 /.git/
-/nbproject/*
-/nbproject/
-/nbproject
-nbproject
+nbproject/genfiles.properties
+nbproject/project.properties
+nbproject/project.xml
+nbproject/*
 /dist/
