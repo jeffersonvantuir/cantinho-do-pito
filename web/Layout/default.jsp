@@ -3,7 +3,7 @@
     Created on : 07/06/2018, 17:11:20
     Author     : jefferson
 --%>
-
+<link rel="shortcut icon" type="image/png" href="/cantinho-do-pito/resources/img/logo.png"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!--Import materialize.css-->
 <link type="text/css" rel="stylesheet" href="/cantinho-do-pito/resources/css/materialize.min.css"  media="screen,projection"/>

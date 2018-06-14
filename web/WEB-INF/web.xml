@@ -13,8 +13,13 @@
         <servlet-class>Controller.ProductsController</servlet-class>
     </servlet>
     <servlet>
+<<<<<<< HEAD
         <servlet-name>HomeController</servlet-name>
         <servlet-class>Controller.HomeController</servlet-class>
+=======
+        <servlet-name>BrandsController</servlet-name>
+        <servlet-class>Controller.BrandsController</servlet-class>
+>>>>>>> 0d37859d8b10d0cbcdd32a58c50c1c2ec8f78b76
     </servlet>
     <servlet-mapping>
         <servlet-name>ClientsController</servlet-name>
@@ -29,8 +34,13 @@
         <url-pattern>/products</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/home</url-pattern>
+=======
+        <servlet-name>BrandsController</servlet-name>
+        <url-pattern>/brands</url-pattern>
+>>>>>>> 0d37859d8b10d0cbcdd32a58c50c1c2ec8f78b76
     </servlet-mapping>
     <session-config>
         <session-timeout>

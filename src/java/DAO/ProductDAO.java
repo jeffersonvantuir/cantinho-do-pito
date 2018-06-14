@@ -1,4 +1,3 @@
-
 package DAO;
 
 import Model.Product;
@@ -14,10 +13,10 @@ import java.util.List;
  * @author ricardo
  */
 public class ProductDAO {
+
     private Connection conn;
-    
-    public ProductDAO()
-    {
+
+    public ProductDAO() {
         try {
             this.conn = ConnectionFactory.getConnection();
 
@@ -25,10 +24,9 @@ public class ProductDAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
-    public List index()
-    {
-       try {
+
+    public List index() {
+        try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products");
 
             ResultSet rs = pstmt.executeQuery();
@@ -45,19 +43,19 @@ public class ProductDAO {
                 product.setImage(rs.getString("image"));
                 product.setCategoryId(rs.getInt("category_id"));
                 product.setBrandId(rs.getInt("brand_id"));
-                
+
                 CategoryDAO categoryDAO = new CategoryDAO();
                 product.setCategory(categoryDAO.view(product.getCategoryId()));
-                
+
                 BrandDAO brandDAO = new BrandDAO();
                 product.setBrand(brandDAO.view(product.getBrandId()));
-                
+
                 listProducts.add(product);
             }
 
             pstmt.close();
             rs.close();
-            
+
             this.conn.close();
 
             return listProducts;
@@ -67,9 +65,8 @@ public class ProductDAO {
             return null;
         }
     }
-    
-    public boolean add(Product product)
-    {
+
+    public boolean add(Product product) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO products (name, description, price, stock, image, category_id, brand_id)"
                     + " VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -83,24 +80,23 @@ public class ProductDAO {
             pstmt.setInt(7, product.getBrandId());
             pstmt.executeUpdate();
             pstmt.close();
-            
+
             this.conn.close();
-            
+
             return true;
         } catch (SQLException e) {
-           e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public boolean edit(Product product)
-    {
+
+    public boolean edit(Product product) {
         try {
             PreparedStatement pstmt = null;
-            
+
             if (product.getImage() == null) {
                 pstmt = conn.prepareStatement("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, category_id = ?, brand_id = ?"
-                    + " WHERE id = ?");
+                        + " WHERE id = ?");
                 pstmt.setString(1, product.getName());
                 pstmt.setString(2, product.getDescription());
                 pstmt.setDouble(3, product.getPrice());
@@ -110,7 +106,7 @@ public class ProductDAO {
                 pstmt.setInt(7, product.getId());
             } else {
                 pstmt = conn.prepareStatement("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, image = ?, category_id = ?, brand_id = ?"
-                    + " WHERE id = ?");
+                        + " WHERE id = ?");
                 pstmt.setString(1, product.getName());
                 pstmt.setString(2, product.getDescription());
                 pstmt.setDouble(3, product.getPrice());
@@ -120,22 +116,21 @@ public class ProductDAO {
                 pstmt.setInt(7, product.getBrandId());
                 pstmt.setInt(8, product.getId());
             }
-            
+
             pstmt.executeUpdate();
             pstmt.close();
-            
+
             this.conn.close();
-            
+
             return true;
         } catch (SQLException e) {
-           e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public Product view(int id)
-    {
-       try {
+
+    public Product view(int id) {
+        try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE id = ?");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -151,20 +146,20 @@ public class ProductDAO {
                 product.setImage(rs.getString("image"));
                 product.setCategoryId(rs.getInt("category_id"));
                 product.setBrandId(rs.getInt("brand_id"));
-                
+
                 CategoryDAO categoryDAO = new CategoryDAO();
                 product.setCategory(categoryDAO.view(product.getCategoryId()));
-                
+
                 BrandDAO brandDAO = new BrandDAO();
                 product.setBrand(brandDAO.view(product.getBrandId()));
-                
+
             }
 
             pstmt.close();
             rs.close();
 
             this.conn.close();
-            
+
             return product;
 
         } catch (SQLException e) {
@@ -172,22 +167,62 @@ public class ProductDAO {
             return null;
         }
     }
-    
-    public boolean delete(Product product)
-    {
+
+    public boolean delete(Product product) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM products WHERE id = ?");
 
             pstmt.setInt(1, product.getId());
             pstmt.executeUpdate();
             pstmt.close();
-            
+
             this.conn.close();
-            
+
             return true;
         } catch (SQLException e) {
-           e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
+
+    public List requests() 
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT pr.* FROM requests re, products pr WHERE re.product_id = pr.id AND re.status = FALSE ORDER BY pr.name");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Product> listProducts = new ArrayList<Product>();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setStock(rs.getInt("stock"));
+                product.setImage(rs.getString("image"));
+                product.setCategoryId(rs.getInt("category_id"));
+                product.setBrandId(rs.getInt("brand_id"));
+
+                CategoryDAO categoryDAO = new CategoryDAO();
+                product.setCategory(categoryDAO.view(product.getCategoryId()));
+
+                BrandDAO brandDAO = new BrandDAO();
+                product.setBrand(brandDAO.view(product.getBrandId()));
+
+                listProducts.add(product);
+            }
+
+            pstmt.close();
+            rs.close();
+
+            return listProducts;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+
 }

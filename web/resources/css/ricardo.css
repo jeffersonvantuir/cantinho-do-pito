@@ -3,7 +3,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : 09/06/2018, 20:47:42
     Author     : ricardo
 */
@@ -12,12 +12,25 @@ and open the template in the editor.
     visibility: visible !important;
 }
 
-  body {
+body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-  }
+}
 
-  main {
+main {
     flex: 1 0 auto;
-  }
+}
+
+.logo {
+    height: 60px !important;
+    width: 60px !important;
+}
+
+#flash {
+    color: white;
+}
+
+#flash:hover {
+    cursor: pointer;
+}
