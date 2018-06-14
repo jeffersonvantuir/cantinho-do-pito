@@ -36,12 +36,12 @@ public class CategoryDAO {
             List<Category> listCategories = new ArrayList<Category>();
 
             while (rs.next()) {
-                Category client = new Category();
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
-                client.setDescription(rs.getString("description"));
+                Category category = new Category();
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                category.setDescription(rs.getString("description"));
 
-                listCategories.add(client);
+                listCategories.add(category);
             }
 
             pstmt.close();
