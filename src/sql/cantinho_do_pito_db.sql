@@ -54,7 +54,7 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE brands (
-        id INTEGER AUTO_INCREMENT NOT NULL,
+    id INTEGER AUTO_INCREMENT NOT NULL,
 	name VARCHAR(255) NOT NULL,
 	CONSTRAINT pk_brands PRIMARY KEY (id)
 );
@@ -74,7 +74,7 @@ CREATE TABLE products (
 );
 
 CREATE TABLE buy (
-	id INTEGER AUTO_INCREMENT NOT NULL,
+	id CHAR(36) NOT NULL,
 	total_price DECIMAL(7,2) NOT NULL,
 	date DATE NOT NULL,
 	client_id INTEGER NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE buy_products (
     	amount INTEGER NOT NULL,
 	total_price DECIMAL(7,2) NOT NULL,
 	product_id INTEGER NOT NULL,
-    	buy_id INTEGER NOT NULL,
+    	buy_id CHAR(36) NOT NULL,
 	CONSTRAINT pk_buy_produtcs PRIMARY KEY (id),
   	CONSTRAINT fk_products_buy_products FOREIGN KEY (product_id) REFERENCES products(id),
 	CONSTRAINT fk_buy_buy_products FOREIGN KEY (buy_id) REFERENCES buy(id)
