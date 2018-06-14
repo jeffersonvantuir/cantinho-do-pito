@@ -82,7 +82,7 @@
                                     <div class="file-field input-field col s12 m6 l6">
                                       <div class="btn black">
                                         <span>File</span>
-                                        <input type="file" id="file" name="image">
+                                        <input type="file" id="file" name="image" accept="image/*">
                                       </div>
                                       <div class="file-path-wrapper">
                                         <input class="file-path validate" type="text">
