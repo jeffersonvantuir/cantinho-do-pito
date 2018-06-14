@@ -65,6 +65,94 @@ public class ProductDAO {
             return null;
         }
     }
+    
+    public List index(int categoryId) {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE category_id = ?");
+            pstmt.setInt(1, categoryId);
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Product> listProducts = new ArrayList<Product>();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setStock(rs.getInt("stock"));
+                product.setImage(rs.getString("image"));
+                product.setCategoryId(rs.getInt("category_id"));
+                product.setBrandId(rs.getInt("brand_id"));
+
+                CategoryDAO categoryDAO = new CategoryDAO();
+                product.setCategory(categoryDAO.view(product.getCategoryId()));
+
+                BrandDAO brandDAO = new BrandDAO();
+                product.setBrand(brandDAO.view(product.getBrandId()));
+
+                listProducts.add(product);
+            }
+
+            pstmt.close();
+            rs.close();
+
+            this.conn.close();
+
+            return listProducts;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public List index(String search) {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products p, categories c, brands b "
+                    + "WHERE p.category_id = c.id AND p.brand_id = b.id AND"
+                    + " (p.name = ? OR c.name = ? OR b.name = ?)");
+            pstmt.setString(1, '%'+search+'%');
+            pstmt.setString(2, '%'+search+'%');
+            pstmt.setString(3, '%'+search+'%');
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Product> listProducts = new ArrayList<Product>();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setStock(rs.getInt("stock"));
+                product.setImage(rs.getString("image"));
+                product.setCategoryId(rs.getInt("category_id"));
+                product.setBrandId(rs.getInt("brand_id"));
+
+                CategoryDAO categoryDAO = new CategoryDAO();
+                product.setCategory(categoryDAO.view(product.getCategoryId()));
+
+                BrandDAO brandDAO = new BrandDAO();
+                product.setBrand(brandDAO.view(product.getBrandId()));
+
+                listProducts.add(product);
+            }
+
+            pstmt.close();
+            rs.close();
+
+            this.conn.close();
+
+            return listProducts;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
 
     public boolean add(Product product) {
         try {
