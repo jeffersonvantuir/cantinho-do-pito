@@ -39,20 +39,53 @@ public class HomeController extends HttpServlet {
         RequestDispatcher rd = null;
         CategoryDAO categoryDAO = null;
         ProductDAO productDAO = null;
+        Product product = new Product();
+        List<Category> listCategories = null;
+        List<Product> listProducts = null;
         
         String action = request.getParameter("action");
         
         if (action == null) {
             action  = "";
         }
-        
+       
         switch (action) {
+            case "view":
+                if (request.getParameter("id") == null || request.getParameter("id").equals("")) {
+                    rd = request.getRequestDispatcher("home");
+                    rd.forward(request, response);
+                }
+                
+                int id = Integer.parseInt(request.getParameter("id"));
+                productDAO = new ProductDAO();
+                categoryDAO = new CategoryDAO();
+                
+                product = productDAO.view(id);
+                listCategories = categoryDAO.index();
+                
+                request.setAttribute("listCategories", listCategories);
+                request.setAttribute("product", product);
+                rd = request.getRequestDispatcher("Home/view.jsp");
+                rd.forward(request, response);
+                break;
+                
             default:
                 categoryDAO = new CategoryDAO();
                 productDAO = new ProductDAO();
                 
-                List<Category> listCategories = categoryDAO.index();
-                List<Product> listProducts = productDAO.index();
+                listCategories = categoryDAO.index();
+                
+                if (request.getParameter("category_id") == null) {
+                     listProducts = productDAO.index();
+                } else {
+                     listProducts = productDAO.index(Integer.parseInt(request.getParameter("category_id")));
+                }
+                
+                if (request.getParameter("search") != null) {
+                    productDAO = new ProductDAO();
+                    listProducts = productDAO.index(request.getParameter("search"));
+                    request.setAttribute("search", request.getParameter("search"));
+                }
                 
                 request.setAttribute("listCategories", listCategories);
                 request.setAttribute("listProducts", listProducts);
