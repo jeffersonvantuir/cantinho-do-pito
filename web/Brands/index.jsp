@@ -1,9 +1,9 @@
 <%-- 
     Document   : index
-    Created on : 09/06/2018, 14:20:32
+    Created on : 13/06/2018, 21:39:41
     Author     : ricardo
 --%>
-<%@ page import="Model.Category" %>
+<%@ page import="Model.Brand" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Categorias</title>
+        <title>Marcas</title>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
     <body>
@@ -23,30 +23,28 @@
                 <div class="col s12 m6 offset-s3 l6 offset-l3">
                     <div class="card">
                         <div class="card-content">
-                            <span class="card-title">Categorias</span>
+                            <span class="card-title">Marcas</span>
                             <table class="striped responsive-table">
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
-                                        <th>Descrição</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <%
-                                        List<Category> listCategories = (List<Category>) request.getAttribute("listCategories");
-                                        Iterator i = listCategories.iterator();
+                                        List<Brand> listBrands = (List<Brand>) request.getAttribute("listBrands");
+                                        Iterator i = listBrands.iterator();
                                         while (i.hasNext()) {
-                                            Category category = (Category) i.next();
+                                            Brand brand = (Brand) i.next();
                                     %>
                                     <tr>
-                                        <td><%= category.getName()%></td>
-                                        <td><%= category.getDescription()%></td>
+                                        <td><%= brand.getName()%></td>
                                         <td>
-                                            <a href="categories?action=request-edit&id=<%= category.getId()%>">
+                                            <a href="brands?action=request-edit&id=<%= brand.getId()%>">
                                                 <i class="material-icons" title="Excluir">edit</i>
                                             </a>&nbsp
-                                            <a href="categories?action=delete&id=<%= category.getId()%>"  onclick="return confirm('Deseja excluir a categoria <%= category.getName()%>?')">
+                                            <a href="brands?action=delete&id=<%= brand.getId()%>"  onclick="return confirm('Deseja excluir a marca <%= brand.getName()%>?')">
                                                 <i class="material-icons" title="Excluir">delete</i>
                                             </a>&nbsp
                                         </td>

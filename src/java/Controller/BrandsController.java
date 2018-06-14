@@ -1,7 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Controller;
 
-import DAO.CategoryDAO;
-import Model.Category;
+import DAO.BrandDAO;
+import Model.Brand;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -15,18 +20,18 @@ import javax.servlet.http.HttpSession;
  *
  * @author ricardo
  */
-public class CategoriesController extends HttpServlet {
+public class BrandsController extends HttpServlet {
 
-    private Category category;
-    private CategoryDAO categoryDAO;
+    private Brand brand;
+    private BrandDAO brandDAO;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
         RequestDispatcher rd = null;
-        categoryDAO = new CategoryDAO();
-        category = new Category();
+        brandDAO = new BrandDAO();
+        brand = new Brand();
 
         if (action == null) {
             action = "";
@@ -34,27 +39,26 @@ public class CategoriesController extends HttpServlet {
 
         switch (action) {
             case "request-add":
-                rd = request.getRequestDispatcher("Categories/add.jsp");
+                rd = request.getRequestDispatcher("Brands/add.jsp");
                 rd.forward(request, response);
                 break;
 
             case "add":
-                category.setName(request.getParameter("name"));
-                category.setDescription(request.getParameter("description"));
+                brand.setName(request.getParameter("name"));
 
-                if (categoryDAO.add(category)) {
-                    request.setAttribute("success", "Categoria cadastrada com sucesso.");
+                if (brandDAO.add(brand)) {
+                    request.setAttribute("success", "Marca cadastrada com sucesso.");
                 } else {
-                    request.setAttribute("error", "Falha ao casdastrar categoria. Tente novamente.");
+                    request.setAttribute("error", "Falha ao casdastrar marca. Tente novamente.");
                 }
-                rd = request.getRequestDispatcher("categories?action=null");
+                rd = request.getRequestDispatcher("brands?action=null");
                 rd.forward(request, response);
                 break;
 
             case "request-edit":
-                category = categoryDAO.view(Integer.parseInt(request.getParameter("id")));
-                request.setAttribute("categoryEdit", category);
-                rd = request.getRequestDispatcher("Categories/edit.jsp");
+                brand = brandDAO.view(Integer.parseInt(request.getParameter("id")));
+                request.setAttribute("brandEdit", brand);
+                rd = request.getRequestDispatcher("Brands/edit.jsp");
                 rd.forward(request, response);
                 break;
 
@@ -64,37 +68,35 @@ public class CategoriesController extends HttpServlet {
                     rd = request.getRequestDispatcher("clients?action=null");
                     rd.forward(request, response);
                 }
-                category.setId(Integer.parseInt(String.valueOf(session.getAttribute("id"))));
-                category.setName(request.getParameter("name"));
-                category.setDescription(request.getParameter("description"));
+                brand.setId(Integer.parseInt(String.valueOf(session.getAttribute("id"))));
+                brand.setName(request.getParameter("name"));
 
-                if (categoryDAO.edit(category)) {
-                    request.setAttribute("success", "Categoria editada com sucesso.");
+                if (brandDAO.edit(brand)) {
+                    request.setAttribute("success", "Marca editada com sucesso.");
                 } else {
-                    request.setAttribute("error", "Falha ao editar categoria. Tente novamente.");
+                    request.setAttribute("error", "Falha ao editar marca. Tente novamente.");
                 }
-                rd = request.getRequestDispatcher("categories?action=null");
+                rd = request.getRequestDispatcher("brands?action=null");
                 rd.forward(request, response);
                 break;
 
             case "delete":
-                category.setId(Integer.parseInt(request.getParameter("id")));
-
-                if (categoryDAO.delete(category)) {
-                    request.setAttribute("success", "Categoria excluída com sucesso.");
+                brand.setId(Integer.parseInt(request.getParameter("id")));
+                if (brandDAO.delete(brand)) {
+                    request.setAttribute("success", "Marca excluída com sucesso.");
                 } else {
-                    request.setAttribute("error", "Falha ao excluir categoria. Tente novamente.");
+                    request.setAttribute("error", "Falha ao excluir marca. Tente novamente.");
                 }
-
-                rd = request.getRequestDispatcher("categories?action=null");
+                rd = request.getRequestDispatcher("brands?action=null");
                 rd.forward(request, response);
                 break;
             default:
-                List<Category> listCategories = categoryDAO.index();
-                request.setAttribute("listCategories", listCategories);
-                rd = request.getRequestDispatcher("Categories/index.jsp");
+                List <Brand> listBrands = brandDAO.index();
+                request.setAttribute("listBrands", listBrands);
+                rd = request.getRequestDispatcher("Brands/index.jsp");
                 rd.forward(request, response);
                 break;
+
         }
     }
 
@@ -136,4 +138,5 @@ public class CategoriesController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

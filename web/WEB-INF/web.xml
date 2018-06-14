@@ -12,6 +12,10 @@
         <servlet-name>ProductsController</servlet-name>
         <servlet-class>Controller.ProductsController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BrandsController</servlet-name>
+        <servlet-class>Controller.BrandsController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ClientsController</servlet-name>
         <url-pattern>/clients</url-pattern>
@@ -20,10 +24,13 @@
         <servlet-name>CategoriesController</servlet-name>
         <url-pattern>/categories</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>ProductsController</servlet-name>
         <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BrandsController</servlet-name>
+        <url-pattern>/brands</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
