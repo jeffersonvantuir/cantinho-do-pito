@@ -3,6 +3,7 @@
     Created on : 13/06/2018, 21:39:41
     Author     : ricardo
 --%>
+<%@page import="Controller.AccessController"%>
 <%@ page import="Model.Brand" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
@@ -13,6 +14,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Marcas</title>
         <jsp:include page="../Layout/default.jsp"/>
+        <jsp:include page="../Layout/timeout.jsp"/>
     </head>
     <body>
         <jsp:include page="../Layout/navbar.jsp"/>
@@ -33,10 +35,11 @@
                                 </thead>
                                 <tbody>
                                     <%
-                                        List<Brand> listBrands = (List<Brand>) request.getAttribute("listBrands");
-                                        Iterator i = listBrands.iterator();
-                                        while (i.hasNext()) {
-                                            Brand brand = (Brand) i.next();
+                                        if (request.getAttribute("listBrands") != null) {
+                                            List<Brand> listBrands = (List<Brand>) request.getAttribute("listBrands");
+                                            Iterator i = listBrands.iterator();
+                                            while (i.hasNext()) {
+                                                Brand brand = (Brand) i.next();
                                     %>
                                     <tr>
                                         <td><%= brand.getName()%></td>
@@ -49,7 +52,12 @@
                                             </a>&nbsp
                                         </td>
                                     </tr>
-                                    <% }%>
+                                    <% }
+                                        } else {
+                                            AccessController accessController = new AccessController();
+                                            accessController.directoryControl(request, response);
+                                        }
+                                    %>
                                 </tbody>
                             </table>
                         </div>
