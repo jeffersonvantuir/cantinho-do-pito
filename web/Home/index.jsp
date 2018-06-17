@@ -4,6 +4,7 @@
     Author     : jefferson
 --%>
 
+<%@page import="Model.BuyProduct"%>
 <%@page import="Model.Product"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
@@ -28,34 +29,7 @@
     <div class="carousel carousel-slider">
         <a class="carousel-item" href="#!"><img src="resources/img/banner.png"></a>
     </div>
-    <nav>
-        <div class="nav-wrapper black">
-            <ul class="brand-logo center hide-on-small-and-down">
-                <li><a href="home">Todos</a></li>
-                <% List<Category> listCategories = (List<Category>) request.getAttribute("listCategories"); %>
-                <% Iterator i = listCategories.iterator(); %>
-                <% while (i.hasNext()) { %>
-                    <% Category category = (Category) i.next(); %>
-                    <li><a href="?category_id=<%= category.getId() %>"><%= category.getName() %></a></li>
-                <% } %>
-            </ul>
-            <form class="right" method="post">
-                <div class="input-field">
-                    <% if (request.getParameter("search") != null) { %>
-                    <input id="search" type="search" name="search" value="<%= request.getParameter("search") %>" placeholder="Pelo que você procura?">
-                    <% } else { %>
-                    <input id="search" type="search" name="search" placeholder="Pelo que você procura?">
-                    <% } %>
-                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
-                    <input type="submit"/>
-                </div>
-            </form>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="home?action=checkout"><i class="material-icons">shopping_cart</i></a></li>
-            </ul>
-        </div>
-    </nav>
+    <jsp:include page="../Layout/navbar_client.jsp"/>
     <body>
         <main>
             <div class="row">
@@ -73,7 +47,7 @@
                                     <div class="card darken-1">
                                         <div class="card-content black-text">
                                             <img height="250" width="250" src="resources/img/Products/<%= product.getImage() %>"/>
-                                            <h5><%= product.getName() %></h5>
+                                            <h5 title="<%= product.getName() %>" class="truncate"><%= product.getName() %></h5>
                                             <small><%= product.getStock() %> produtos no estoque</small>
                                             <h6><%= String.format("R$ %,.2f", product.getPrice()).replace(",", ".") %></h6>
                                         </div>
