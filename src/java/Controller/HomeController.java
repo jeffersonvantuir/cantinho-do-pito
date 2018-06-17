@@ -7,10 +7,14 @@ package Controller;
 
 import DAO.CategoryDAO;
 import DAO.ProductDAO;
+import Model.BuyProduct;
 import Model.Category;
 import Model.Product;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +36,9 @@ public class HomeController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    private UUID uuid;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=ISO-8859-1");
@@ -67,6 +74,83 @@ public class HomeController extends HttpServlet {
                 request.setAttribute("product", product);
                 rd = request.getRequestDispatcher("Home/view.jsp");
                 rd.forward(request, response);
+                break;
+                
+            case "add-cart":
+                List<BuyProduct> cart = (List<BuyProduct>) request.getSession().getAttribute("cart");
+                
+                int productId = (int) request.getSession().getAttribute("productId");
+                
+                int amount = Integer.parseInt(request.getParameter("quantity"));
+                if (cart == null || cart.isEmpty()) {
+                    
+                    cart = new ArrayList<BuyProduct>();
+                    productDAO = new ProductDAO();
+                    
+                    uuid = UUID.randomUUID();
+                    BuyProduct buyProduct = new BuyProduct();
+                    buyProduct.setBuyId(String.valueOf(uuid));
+                    buyProduct.setAmount(amount);
+                    buyProduct.setProductId(productId);
+                    buyProduct.setProduct(productDAO.view(productId));
+                    buyProduct.setTotalPrice(buyProduct.getProduct().getPrice() * amount);
+                    
+                    cart.add(buyProduct);
+                    
+                    request.getSession().setAttribute("cart", cart);
+                } else {
+                    if (checkProductExistsInCart(productId, cart)) {
+                        updateAmountBuyProduct(productId, cart, amount);
+                    } else {
+                        BuyProduct buyProduct = new BuyProduct();
+                        productDAO = new ProductDAO();
+                        
+                        buyProduct.setBuyId(String.valueOf(uuid));
+                        buyProduct.setAmount(amount);
+                        buyProduct.setProductId(productId);
+                        buyProduct.setProduct(productDAO.view(productId));
+                        buyProduct.setTotalPrice(buyProduct.getProduct().getPrice() * amount);
+                        cart.add(buyProduct);
+
+                        request.getSession().setAttribute("cart", cart);
+                    }
+                }
+                
+                response.sendRedirect("buy?action=checkout");
+                
+                break;
+                
+            case "checkout":
+                categoryDAO = new CategoryDAO();
+                
+                listCategories = categoryDAO.index();
+                request.setAttribute("listCategories", listCategories);
+                rd = request.getRequestDispatcher("Buy/checkout.jsp");
+                rd.forward(request, response);
+                break;
+                
+            case "buy-less":
+                    if (request.getParameter("id") != null && !request.getParameter("id").equals("")) {
+                        productId = Integer.parseInt(request.getParameter("id"));
+                        if (request.getSession().getAttribute("cart") != null) {
+                            cart = (List<BuyProduct>) request.getSession().getAttribute("cart");
+                        
+                            buyLess(productId, cart);
+                        }
+                    }
+                    
+                    response.sendRedirect("buy?action=checkout");
+                break;
+                
+            case "buy-more":
+                    if (request.getParameter("id") != null && !request.getParameter("id").equals("")) {
+                        productId = Integer.parseInt(request.getParameter("id"));
+                        cart = (List<BuyProduct>) request.getSession().getAttribute("cart");
+                        
+                        buyMore(productId, cart);
+                    }
+                    
+                    response.sendRedirect("buy?action=checkout");
                 break;
                 
             default:
@@ -136,4 +220,79 @@ public class HomeController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private boolean checkProductExistsInCart(int productId, List<BuyProduct> cart)
+    {
+        Iterator<BuyProduct> i = cart.iterator();
+        while (i.hasNext()) {
+            BuyProduct buyProduct = i.next();
+            if (buyProduct.getProductId() == productId) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private List<BuyProduct> updateAmountBuyProduct(int productId, List<BuyProduct> cart, int amount)
+    {
+        Iterator<BuyProduct> i = cart.iterator();
+        while (i.hasNext()) {
+            BuyProduct buyProduct = i.next();
+            if (buyProduct.getProductId() == productId) {
+                buyProduct.setAmount(buyProduct.getAmount() + amount);
+                buyProduct.setTotalPrice(buyProduct.getProduct().getPrice() * buyProduct.getAmount());
+            }
+        }
+        
+        return cart;
+    }
+    
+    private void showCart(List<BuyProduct> cart)
+    {
+        Iterator<BuyProduct> i = cart.iterator();
+        
+        while (i.hasNext()) {
+            BuyProduct buyProduct = i.next();
+        }
+    }
+    
+    private List<BuyProduct> buyLess(int productId, List<BuyProduct> cart)
+    {
+        Iterator<BuyProduct> i = cart.iterator();
+        
+        while (i.hasNext()) {
+            BuyProduct buyProduct = i.next();
+
+            if (buyProduct.getProductId() == productId) {
+                if (buyProduct.getAmount() == 1) {
+                    cart.remove(buyProduct);
+                    break;
+                } else {
+                    buyProduct.setAmount(buyProduct.getAmount() - 1);
+                    buyProduct.setTotalPrice(buyProduct.getAmount() * buyProduct.getProduct().getPrice());
+                }
+            }
+        }
+        
+        return cart;
+    }
+    
+    private List<BuyProduct> buyMore(int productId, List<BuyProduct> cart)
+    {
+        Iterator<BuyProduct> i = cart.iterator();
+        
+        while (i.hasNext()) {
+            BuyProduct buyProduct = i.next();
+            
+            if (buyProduct.getProductId() == productId) {
+                if (buyProduct.getAmount() < buyProduct.getProduct().getStock()) {
+                    buyProduct.setAmount(buyProduct.getAmount() + 1);
+                    buyProduct.setTotalPrice(buyProduct.getAmount() * buyProduct.getProduct().getPrice());
+                }
+            }
+        }
+        
+        return cart;
+    }
+    
 }
