@@ -20,6 +20,7 @@ CREATE TABLE address (
 	id INTEGER AUTO_INCREMENT NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	zipcode VARCHAR(20) NOT NULL,
+	home_number INT,
 	complement VARCHAR(255),
 	district VARCHAR(255),
 	city_id INTEGER NOT NULL,
