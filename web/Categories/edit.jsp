@@ -4,6 +4,7 @@
     Author     : ricardo
 --%>
 
+<%@page import="Controller.AccessController"%>
 <%@ page import="Model.Category" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
@@ -14,6 +15,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Editar Categoria</title>
         <jsp:include page="../Layout/default.jsp"/>
+        <jsp:include page="../Layout/timeout.jsp"/>
     </head>
     <body>
         <jsp:include page="../Layout/navbar.jsp"/>
@@ -26,8 +28,9 @@
                             <span class="card-title">Editar Categoria</span>
                             <form method="post" action="categories?action=edit">
                                 <%
-                                    Category category = (Category) request.getAttribute("categoryEdit");
-                                    session.setAttribute("id", category.getId());
+                                    if (request.getAttribute("categoryEdit") != null) {
+                                        Category category = (Category) request.getAttribute("categoryEdit");
+                                        session.setAttribute("id", category.getId());
                                 %>
                                 <div class="row">
                                     <h6>
@@ -52,6 +55,11 @@
                                         <i class="material-icons right">send</i>
                                     </button>
                                 </div>
+                                <% } else {
+                                        AccessController accessController = new AccessController();
+                                        accessController.directoryControl(request, response);
+                                    }
+                                %>
                             </form>
                         </div>
                     </div>

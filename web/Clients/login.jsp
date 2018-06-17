@@ -41,7 +41,7 @@
                                     <a href="clients?action=forgot-password">Esqueceu a senha?</a><br>
                                 </div>
                                 <div class="row">
-                                    <button class="btn waves-effect waves-light col s12 m6 offset-m5 l4 offset-l4" type="submit" name="action">Entrar
+                                    <button class="btn waves-effect waves-light col s12 m6 offset-m5 l4 offset-l4 black" type="submit" name="action">Entrar
                                         <i class="material-icons right">send</i>
                                     </button>    
                                 </div>
@@ -51,5 +51,6 @@
                 </div>
             </div>
         </main>
+        <jsp:include page="../Layout/footer.jsp"/>
     </body>
 </html>

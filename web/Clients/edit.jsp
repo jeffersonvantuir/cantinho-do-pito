@@ -4,18 +4,23 @@
     Author     : jefferson
 --%>
 
+<%@page import="Controller.AccessController"%>
 <%@page import="Model.Client"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.State"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1" %>
+<%
+    if (request.getAttribute("client") != null) {
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Editar Cliente</title>
         <jsp:include page="../Layout/default.jsp"/>
+        <jsp:include page="../Layout/timeout.jsp"/>
     </head>
     <body>
         <jsp:include page="../Layout/navbar.jsp"/>
@@ -27,8 +32,7 @@
                         <div class="card-content">
                             <span class="card-title">Editar cliente</span>
                             <form method="post" action="clients?action=edit">
-                                <%
-                                    Client client = (Client) request.getAttribute("client");
+                                <%                                    Client client = (Client) request.getAttribute("client");
                                     session.setAttribute("id", client.getId());
                                 %>
                                 <div class="row">
@@ -183,3 +187,9 @@
                 });
     });
 </script>
+<%
+    } else {
+        AccessController accessController = new AccessController();
+        accessController.directoryControl(request, response);
+    }
+%>

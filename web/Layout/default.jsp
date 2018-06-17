@@ -3,6 +3,7 @@
     Created on : 07/06/2018, 17:11:20
     Author     : jefferson
 --%>
+<%@page import="Controller.AccessController"%>
 <link rel="shortcut icon" type="image/png" href="/cantinho-do-pito/resources/img/logo.png"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!--Import materialize.css-->
@@ -18,10 +19,10 @@
 <script type="text/javascript" src="/cantinho-do-pito/resources/js/jquery.mask.js"></script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.materialboxed').materialbox();
     });
-  
+
     $(document).ready(function () {
         $('select').formSelect();
         $('#zipcode').mask('00000-000');
@@ -77,12 +78,12 @@
                 'Dezembro'
             ]
         }
-        
-        var date = new Date(); 
+
+        var date = new Date();
         date.setDate(date.getDate());
         date.setMonth(date.getMonth());
         date.setFullYear(date.getFullYear() - 18);
-        
+
         var options = {
             container: 'body',
             format: 'dd-mm-yyyy',

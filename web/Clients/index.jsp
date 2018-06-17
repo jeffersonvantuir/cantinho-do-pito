@@ -3,6 +3,7 @@
     Created on : 10/06/2018, 10:06:12
     Author     : jefferson
 --%>
+<%@page import="Controller.AccessController"%>
 <%@ page import="Model.Client" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
@@ -13,6 +14,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Clientes</title>
         <jsp:include page="../Layout/default.jsp"/>
+        <jsp:include page="../Layout/timeout.jsp"/>
     </head>
     <body>
         <jsp:include page="../Layout/navbar.jsp"/>
@@ -38,18 +40,19 @@
                                 </thead>
                                 <tbody>
                                     <%
-                                        List<Client> listClients = (List<Client>) request.getAttribute("listClients");
-                                        Iterator i = listClients.iterator();
-                                        while (i.hasNext()) {
-                                            Client client = (Client) i.next();
+                                        if (request.getAttribute("listClients") != null) {
+                                            List<Client> listClients = (List<Client>) request.getAttribute("listClients");
+                                            Iterator i = listClients.iterator();
+                                            while (i.hasNext()) {
+                                                Client client = (Client) i.next();
                                     %>
                                     <tr>
-                                        <td><%= client.getName() %></td>
-                                        <td><%= client.getEmail() %></td>
-                                        <td><%= client.getCpf() %></td>
-                                        <td><%= client.getCellphone() %></td>
-                                        <td><%= client.getAddress() %></td>
-                                        <td><%= client.getCity().getName() + ", " + client.getCity().getState().getUf() %></td>
+                                        <td><%= client.getName()%></td>
+                                        <td><%= client.getEmail()%></td>
+                                        <td><%= client.getCpf()%></td>
+                                        <td><%= client.getCellphone()%></td>
+                                        <td><%= client.getAddress()%></td>
+                                        <td><%= client.getCity().getName() + ", " + client.getCity().getState().getUf()%></td>
                                         <td>
                                             <a href="clients?action=request-edit&id=<%= client.getId()%>">
                                                 <i class="material-icons" title="Editar">edit</i>
@@ -59,7 +62,11 @@
                                             </a>&nbsp
                                         </td>
                                     </tr>
-                                    <% }%>
+                                    <% }
+                                        } else {
+                                            AccessController accessController = new AccessController();
+                                            accessController.directoryControl(request, response);
+                                        }%>
                                 </tbody>
                             </table>
                         </div>
