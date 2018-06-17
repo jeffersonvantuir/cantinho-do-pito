@@ -24,13 +24,13 @@ import javax.servlet.http.HttpSession;
  * @author jefferson
  */
 public class ClientsController extends HttpServlet {
-    
+
     private List listStates;
     private Client client;
-    
-protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException, NoSuchAlgorithmException {
-        
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, NoSuchAlgorithmException {
+
         response.setContentType("text/html;charset=ISO-8859-1");
         String action = request.getParameter("action");
         RequestDispatcher rd = null;
@@ -45,36 +45,39 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         }
         switch (action) {
             case "request-login":
-                if (session.getAttribute("client") != null) {
-                    request.setAttribute("success", "Você já está logado");
-                    rd = request.getRequestDispatcher("clients?action=null");
-                    rd.forward(request, response);
-                }
+//                if (session.getAttribute("client") != null) {
+//                    request.setAttribute("success", "Você já está logado");
+//                    rd = request.getRequestDispatcher("clients?action=null");
+//                    rd.forward(request, response);
+//                }
                 rd = request.getRequestDispatcher("Clients/login.jsp");
                 rd.forward(request, response);
                 break;
-                
+
             case "login":
                 if (request.getParameter("email") == null || request.getParameter("password") == null) {
                     session.invalidate();
                     rd = request.getRequestDispatcher("clients?action=request-login");
                     rd.forward(request, response);
-                }
-                
-                String email = request.getParameter("email");
-                String password = helper.md5(request.getParameter("password"));
-                
-                client = clientDAO.login(email, password);
-                System.out.println("CLIENT EMAIL: "+ client.getEmail());
-                if (client.getEmail() != null) {
-                    session.setAttribute("client", client);
-                    request.setAttribute("success", "Login com sucesso");
-                    rd = request.getRequestDispatcher("clients?action=request-login");
-                    rd.forward(request, response);
                 } else {
-                    request.setAttribute("error", "E-mail ou senha icorreta");
-                    rd = request.getRequestDispatcher("clients?action=request-login");
-                    rd.forward(request, response);
+                    String email = request.getParameter("email");
+                    String password = helper.md5(request.getParameter("password"));
+
+                    client = clientDAO.login(email, password);
+                    if (client.getEmail() != null) {
+                        session.setAttribute("client", client);
+                        request.setAttribute("success", "Login realizado com sucesso.");
+                        if (request.getSession().getAttribute("complete_purchase") != null) {
+                            response.sendRedirect("buy?action=complete-purchase");
+                        } else {
+                            rd = request.getRequestDispatcher("clients?action=request-login");
+                            rd.forward(request, response);
+                        }
+                    } else {
+                        request.setAttribute("error", "E-mail ou senha icorretos.");
+                        rd = request.getRequestDispatcher("clients?action=request-login");
+                        rd.forward(request, response);
+                    }
                 }
                 break;
             case "request-add":
@@ -84,12 +87,12 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                     rd.forward(request, response);
                 }
                 listStates = stateDAO.list();
-                
+
                 request.setAttribute("listStates", listStates);
                 rd = request.getRequestDispatcher("Clients/add.jsp");
                 rd.forward(request, response);
                 break;
-                
+
             case "add":
                 if (!clientDAO.cpfAlready(0, request.getParameter("cpf"))) {
                     if (!clientDAO.emailAlready(0, request.getParameter("email"))) {
@@ -150,7 +153,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                     rd.forward(request, response);
                 }
                 break;
-                
+
             case "load-cities":
                 State state = new State();
                 state.setId(Integer.parseInt(request.getParameter("state_id")));
@@ -160,10 +163,10 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 rd = request.getRequestDispatcher("Clients/load_cities.jsp");
                 rd.forward(request, response);
                 break;
-                
+
             case "request-edit":
                 listStates = stateDAO.list();
-                
+
                 client = clientDAO.view(Integer.parseInt(request.getParameter("id")));
                 State stateSelect = new State();
                 stateSelect.setId(cityDAO.getStateIdByCityId(client.getCityId()));
@@ -174,16 +177,15 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 rd = request.getRequestDispatcher("Clients/edit.jsp");
                 rd.forward(request, response);
                 break;
-                
+
             case "edit":
-                
                 if (session.getAttribute("id") == null || session.getAttribute("id").equals("")) {
                     rd = request.getRequestDispatcher("clients?action=null");
                     rd.forward(request, response);
                 }
-                
+
                 int id = Integer.parseInt(String.valueOf(session.getAttribute("id")));
-                
+
                 if (!clientDAO.cpfAlready(id, request.getParameter("cpf"))) {
                     if (!clientDAO.emailAlready(id, request.getParameter("email"))) {
                         client = new Client();
@@ -234,10 +236,10 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                     rd.forward(request, response);
                 }
                 break;
-            
+
             case "delete":
                 client = clientDAO.view(Integer.parseInt(request.getParameter("id")));
-                
+
                 if (clientDAO.delete(client)) {
                     request.setAttribute("success", "Cliente excluído com sucesso.");
                 } else {
@@ -246,35 +248,18 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 rd = request.getRequestDispatcher("clients?action=null");
                 rd.forward(request, response);
                 break;
-                
+
             default:
                 List listClients = clientDAO.index();
-                
+
                 request.setAttribute("listClients", listClients);
                 rd = request.getRequestDispatcher("Clients/index.jsp");
                 rd.forward(request, response);
                 break;
         }
-
-       
-        
-        /*
-        List listStates = stateDAO.list();
-        request.setAttribute("listStates", listStates);
-        rd = request.getRequestDispatcher("add.jsp");
-        rd.forward(request, response);
-        if (action.equalsIgnoreCase("list")) {
-            List listClients = clientDAO.list();
-
-            request.setAttribute("listClients", listClients);
-
-            rd = request.getRequestDispatcher("showAllClients.jsp");
-            rd.forward(request, response);
-        }*/
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             processRequest(request, response);
         } catch (NoSuchAlgorithmException ex) {

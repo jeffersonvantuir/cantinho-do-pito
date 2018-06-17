@@ -4,6 +4,7 @@
     Author     : jefferson
 --%>
 
+<%@page import="Controller.AccessController"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.State"%>
 <%@page import="java.util.List"%>
@@ -17,7 +18,7 @@
         <jsp:include page="../Layout/default.jsp"/>
     </head>
     <body>
-        <jsp:include page="../Layout/navbar.jsp"/>
+        <%--<jsp:include page="../Layout/navbar.jsp"/>--%>
         <main>
             <jsp:include page="../Layout/sidenav.jsp"/>
             <div class="row">
@@ -105,13 +106,20 @@
                                     <div class="input-field col s12 m6 l6">
                                         <select name="state" id="state" required>
                                             <%
-                                                List<State> listStates = (List<State>) request.getAttribute("listStates");
-                                                Iterator i = listStates.iterator();
-                                                while (i.hasNext()) {
-                                                    State state = (State) i.next();
+                                                if (request.getAttribute("listStates") != null) {
+                                                    List<State> listStates = (List<State>) request.getAttribute("listStates");
+                                                    Iterator i = listStates.iterator();
+                                                    while (i.hasNext()) {
+                                                        State state = (State) i.next();
                                             %>
                                             <option value="<%= state.getId()%>"><%= state.getName()%></option>
-                                            <% }%>
+                                            <%
+                                                    }
+                                                } else {
+                                                    AccessController accessController = new AccessController();
+                                                    accessController.directoryControl(request, response);
+                                                }
+                                            %>
                                         </select>
                                         <label>Estado</label>
                                     </div>

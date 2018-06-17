@@ -4,6 +4,7 @@
     Author     : jefferson
 --%>
 
+<%@page import="Controller.AccessController"%>
 <%@page import="Model.Brand"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.Category"%>
@@ -14,6 +15,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
         <title>Adicionar Produto</title>
+        <jsp:include page="../Layout/timeout.jsp"/>
         <jsp:include page="../Layout/default.jsp"/>
     </head>
     <body>
@@ -56,43 +58,54 @@
                                         <i class="material-icons prefix">local_offer</i>
                                         <select name="brand_id">
                                             <%
-                                                List<Brand> listBrands = (List<Brand>) request.getAttribute("listBrands");
-                                                Iterator i = listBrands.iterator();
-                                                while (i.hasNext()) {
-                                                    Brand brand = (Brand) i.next();
-                                                
-                                             %>
-                                             <option value="<%= brand.getId() %>"><%= brand.getName()%></option>
-                                             <%
-                                                 }
-                                             %>
+                                                if (request.getAttribute("listBrands") != null) {
+
+                                                    List<Brand> listBrands = (List<Brand>) request.getAttribute("listBrands");
+                                                    Iterator i = listBrands.iterator();
+                                                    while (i.hasNext()) {
+                                                        Brand brand = (Brand) i.next();
+
+                                            %>
+                                            <option value="<%= brand.getId()%>"><%= brand.getName()%></option>
+                                            <%
+                                                    }
+                                                } else {
+                                                    AccessController accessController = new AccessController();
+                                                    accessController.directoryControl(request, response);
+                                                }
+                                            %>
                                         </select>
                                         <label>Marca</label>
                                     </div>
                                     <div class="file-field input-field col s12 m6 l6">
-                                      <div class="btn black">
-                                        <span>File</span>
-                                        <input type="file" id="file" name="image" accept="image/*">
-                                      </div>
-                                      <div class="file-path-wrapper">
-                                        <input class="file-path validate" required type="text">
-                                        <span class="helper-text">* Campo Obrigatório</span>
-                                      </div>
+                                        <div class="btn black">
+                                            <span>File</span>
+                                            <input type="file" id="file" name="image" accept="image/*">
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" required type="text">
+                                            <span class="helper-text">* Campo Obrigatório</span>
+                                        </div>
                                     </div>
                                     <div class="input-field col s12 m6 l6">
                                         <i class="material-icons prefix">category</i>
                                         <select name="category_id">
                                             <%
-                                                List<Category> listCategories = (List<Category>) request.getAttribute("listCategories");
-                                                Iterator in = listCategories.iterator();
-                                                while (in.hasNext()) {
-                                                    Category category = (Category) in.next();
-                                                
-                                             %>
-                                             <option value="<%= category.getId() %>"><%= category.getName()%></option>
-                                             <%
-                                                 }
-                                             %>
+                                                if (request.getAttribute("listCategories") != null) {
+                                                    List<Category> listCategories = (List<Category>) request.getAttribute("listCategories");
+                                                    Iterator in = listCategories.iterator();
+                                                    while (in.hasNext()) {
+                                                        Category category = (Category) in.next();
+
+                                            %>
+                                            <option value="<%= category.getId()%>"><%= category.getName()%></option>
+                                            <%
+                                                    }
+                                                } else {
+                                                    AccessController accessController = new AccessController();
+                                                    accessController.directoryControl(request, response);
+                                                }
+                                            %>
                                         </select>
                                         <label>Categoria</label>
                                     </div>
@@ -119,33 +132,33 @@
     </body>
 </html>
 <script>
-    $(function() {
-        $('#price').on('input', function() {
-          this.value = this.value
-            .replace(/[^\d.]/g, '')             // numbers and decimals only
-            .replace(/(\..*)\./g, '$1')         // decimal can't exist more than once
-            .replace(/(\.[\d]{2})./g, '$1');    // not more than 4 digits after decimal
+    $(function () {
+        $('#price').on('input', function () {
+            this.value = this.value
+                    .replace(/[^\d.]/g, '')             // numbers and decimals only
+                    .replace(/(\..*)\./g, '$1')         // decimal can't exist more than once
+                    .replace(/(\.[\d]{2})./g, '$1');    // not more than 4 digits after decimal
         });
-        
-        $('#stock').on('input', function() {
-          this.value = this.value
-            .replace(/[^\d.]/g, '')             // numbers and decimals only
+
+        $('#stock').on('input', function () {
+            this.value = this.value
+                    .replace(/[^\d.]/g, '')             // numbers and decimals only
         });
-  });
-  
-  function previewImage(input) {
-      if (input.files && input.files[0]) {
-          var image = new FileReader();
-          
-          image.onload = function(e) {
-              $("#imagePreview").attr('src', e.target.result);
-          }
-          image.readAsDataURL(input.files[0]);
-      }
-  }
-  
-  $("#file").change(function () {
-      previewImage(this);
-  })
-  
+    });
+
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var image = new FileReader();
+
+            image.onload = function (e) {
+                $("#imagePreview").attr('src', e.target.result);
+            }
+            image.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#file").change(function () {
+        previewImage(this);
+    })
+
 </script>

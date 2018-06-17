@@ -4,6 +4,7 @@
     Author     : jefferson
 --%>
 
+<%@page import="Controller.AccessController"%>
 <%@page import="java.io.File"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
@@ -15,6 +16,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Produtos</title>
         <jsp:include page="../Layout/default.jsp"/>
+        <jsp:include page="../Layout/timeout.jsp"/>
     </head>
     <body>
         <jsp:include page="../Layout/navbar.jsp"/>
@@ -41,20 +43,21 @@
                                 </thead>
                                 <tbody>
                                     <%
-                                        List<Product> listProducts = (List<Product>) request.getAttribute("listProducts");
-                                        Iterator i = listProducts.iterator();
-                                        while (i.hasNext()) {
-                                            Product product = (Product) i.next();
+                                        if (request.getAttribute("listProducts") != null) {
+                                            List<Product> listProducts = (List<Product>) request.getAttribute("listProducts");
+                                            Iterator i = listProducts.iterator();
+                                            while (i.hasNext()) {
+                                                Product product = (Product) i.next();
                                     %>
                                     <tr>
                                         <td><%= product.getName()%></td>
                                         <td><%= product.getDescription()%></td>
-                                        <td><%= String.format("R$ %,.2f", product.getPrice()).replace(",", ".") %></td>
-                                        <td><%= product.getStock() %></td>
-                                        <td><%= product.getBrand().getName() %></td>
-                                        <td><%= product.getCategory().getName() %></td>
+                                        <td><%= String.format("R$ %,.2f", product.getPrice()).replace(",", ".")%></td>
+                                        <td><%= product.getStock()%></td>
+                                        <td><%= product.getBrand().getName()%></td>
+                                        <td><%= product.getCategory().getName()%></td>
                                         <td>
-                                            <img class="materialboxed" height="40" width="40" src="resources/img/Products/<%= product.getImage() %>">
+                                            <img class="materialboxed" height="40" width="40" src="resources/img/Products/<%= product.getImage()%>">
                                         <td>
                                             <a href="products?action=request-edit&id=<%= product.getId()%>">
                                                 <i class="material-icons">create</i>
@@ -64,7 +67,13 @@
                                             </a>&nbsp&nbsp
                                         </td>
                                     </tr>
-                                    <% }%>
+                                    <%
+                                            }
+                                        } else {
+                                            AccessController accessController = new AccessController();
+                                            accessController.directoryControl(request, response);
+                                        }
+                                    %>
                                 </tbody>
                             </table>
                         </div>
