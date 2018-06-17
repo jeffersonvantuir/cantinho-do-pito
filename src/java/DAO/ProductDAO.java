@@ -112,7 +112,7 @@ public class ProductDAO {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products p, categories c, brands b "
                     + "WHERE p.category_id = c.id AND p.brand_id = b.id AND"
-                    + " (p.name = ? OR c.name = ? OR b.name = ?)");
+                    + " (p.name LIKE ? OR c.name LIKE ? OR b.name LIKE ?)");
             pstmt.setString(1, '%'+search+'%');
             pstmt.setString(2, '%'+search+'%');
             pstmt.setString(3, '%'+search+'%');
