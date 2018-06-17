@@ -17,7 +17,7 @@ CREATE TABLE cities (
 );
 
 CREATE TABLE address (
-	id INTEGER AUTO_INCREMENT NOT NULL,
+	id CHAR(36) NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	zipcode VARCHAR(20) NOT NULL,
 	home_number INT,
@@ -79,7 +79,7 @@ CREATE TABLE buy (
 	total_price DECIMAL(7,2) NOT NULL,
 	date DATE NOT NULL,
 	client_id INTEGER NOT NULL,
-	address_id INTEGER NOT NULL,
+	address_id CHAR(36) NOT NULL,
 	CONSTRAINT pk_buy PRIMARY KEY (id),
 	CONSTRAINT fk_clients_buy FOREIGN KEY (client_id) REFERENCES clients(id),
   	CONSTRAINT fk_address_buy FOREIGN KEY (address_id) REFERENCES address(id)
