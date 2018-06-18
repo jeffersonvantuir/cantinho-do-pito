@@ -78,6 +78,7 @@ CREATE TABLE buy (
 	id CHAR(36) NOT NULL,
 	total_price DECIMAL(7,2) NOT NULL,
 	date DATE NOT NULL,
+	authorized BOOLEAN DEFAULT FALSE,
 	client_id INTEGER NOT NULL,
 	address_id CHAR(36) NOT NULL,
 	CONSTRAINT pk_buy PRIMARY KEY (id),
