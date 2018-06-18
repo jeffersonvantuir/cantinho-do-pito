@@ -8,8 +8,9 @@ public class Buy {
    String id;
    double totalPrice;
    String date;
+   boolean authorized;
    int clientId;
-   int addressId;
+   String addressId;
 
     public String getId() {
         return id;
@@ -35,6 +36,14 @@ public class Buy {
         this.date = date;
     }
 
+    public boolean isAuthorized() {
+        return authorized;
+    }
+
+    public void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
+    }
+    
     public int getClientId() {
         return clientId;
     }
@@ -43,11 +52,11 @@ public class Buy {
         this.clientId = clientId;
     }
 
-    public int getAddressId() {
+    public String getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(int addressId) {
+    public void setAddressId(String addressId) {
         this.addressId = addressId;
     }
 }

@@ -4,6 +4,8 @@
     Author     : jefferson
 --%>
 
+<%@page import="Model.BuyProduct"%>
+<%@page import="Model.Client"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.State"%>
 <%@page import="java.util.List"%>
@@ -24,65 +26,86 @@
                 <jsp:include page="../Layout/flash.jsp"/>
                 <div class="card darken-1 col s12 m10 offset-m1">
                     <div class="card-content black-text">
-                        
-                        <div class="row">
-                            <span class="card-title black-text">ENDEREÇO DE ENTREGA</span>    
-                            <h6>Endereço</h6>
-                            
-                            <p>
-                              <label>
-                                <input class="with-gap" id="use_another" name="option" value="use_another" type="radio" />
-                                <span>Utilizar outro endereço</span>
-                              </label>
-                            </p>
-                        </div>
-                        <div class="row hide" id="another_address">
-                            <h6 class="col s12">
-                                <i class="material-icons">location_city</i>
-                                Endereço
-                            </h6>
-                            <div class="divider col s12"></div>
-                            <div class="input-field col s12 m6 l6">
-                                <input id="zipcode" name="zipcode" type="text" required>
-                                <label for="zipcode">CEP</label>
-                                <span class="helper-text">* Campo Obrigatório</span>
+                        <form method="post" action="buy?action=checkout">
+                            <% Client client = (Client) request.getSession().getAttribute("client"); %>
+                            <div class="row">
+                                <div class="col s12 m6">
+                                    <div class="row">
+                                        <span class="card-title black-text">ENDEREÇO DE ENTREGA</span>    
+                                        <p>
+                                            <b>Endereço: </b> <%= client.getAddress() + ", " + client.getHomeNumber() %>
+                                        </p>
+                                        <p>
+                                            <b>Bairro: </b> <%= client.getDistrict() %>
+                                        </p>
+                                        <p>
+                                            <b>Cidade: </b> <%= client.getCity().getName() + ", " + client.getCity().getState().getUf() %>
+                                        </p>
+                                        <p>
+                                            <b>CEP: </b> <%= client.getZipcode() %>
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <p>
+                                          <label>
+                                            <input class="filled-in" id="use_another" name="option" value="use_another" type="checkbox" />
+                                            <span>Quer receber seus produtos em outro endereço?</span>
+                                          </label>
+                                        </p>
+                                    </div>
+                                    <div class="row" id="another_address">
+                                        <div class="preloader-wrapper small">
+                                            <div class="spinner-layer spinner-green-only">
+                                                <div class="circle-clipper left">
+                                                    <div class="circle"></div>
+                                                </div><div class="gap-patch">
+                                                    <div class="circle"></div>
+                                                </div><div class="circle-clipper right">
+                                                    <div class="circle"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6">
+                                    <table class="highlight">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Qtde</th>
+                                                <th>Valor Unitário</th>
+                                                <th>Valor Total</th>
+                                            </tr>
+                                        </thead>
+                                        <% double buyTotalPrice = 0; %>
+                                        <tbody>
+                                        <% List<BuyProduct> cart = (List<BuyProduct>) request.getSession().getAttribute("cart"); %>
+                                        <% Iterator<BuyProduct> iterator = cart.iterator(); %>
+                                        <% while (iterator.hasNext()) { %>
+                                            <% BuyProduct buyProduct = iterator.next(); %>
+                                            <% buyTotalPrice += buyProduct.getTotalPrice(); %>
+                                            <tr>
+                                                <td><%= buyProduct.getProduct().getName() %></td>
+                                                <td>
+                                                    <%= buyProduct.getAmount() %>
+                                                </td>
+                                                <td><%= String.format("R$ %,.2f", buyProduct.getProduct().getPrice()).replace(",", ".") %></td>
+                                                <td><%= String.format("R$ %,.2f", (buyProduct.getTotalPrice())).replace(",", ".") %></td>
+                                            </tr>
+                                        <% } %>
+                                        </tbody>
+                                        <div class="divider"></div>
+                                        <tr class="grey lighten-4">
+                                            <td colspan="3">TOTAL</td>
+                                            <td><%= String.format("R$ %,.2f", (buyTotalPrice)).replace(",", ".") %></td>
+                                        </tr>
+                                    </table><br>
+                                    <div class="row">
+                                        <button class="btn waves-effect waves-light right black col s12 m6 l4" type="submit" name="action">Finalizar</button>   
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-field col s12 m6 l6">
-                                <input id="address" name="address" type="text" required>
-                                <label for="address">Endereço</label>
-                                <span class="helper-text">* Campo Obrigatório</span>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <input id="number" name="home_number" type="number">
-                                <label for="number">Número</label>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <input id="complement" name="complement" type="text">
-                                <label for="complement">Complemento</label>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <input id="district" name="district" type="text">
-                                <label for="district">Bairro</label>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <select name="state" id="state" required>
-                                    <%
-                                        List<State> listStates = (List<State>) request.getAttribute("listStates");
-                                        Iterator i = listStates.iterator();
-                                        while (i.hasNext()) {
-                                            State state = (State) i.next();
-                                    %>
-                                    <option value="<%= state.getId()%>"><%= state.getName()%></option>
-                                    <% }%>
-                                </select>
-                                <label>Estado</label>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <select name="city" id="city" required>
-                                </select>
-                                <label>Cidade</label>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -104,32 +127,31 @@
                     $("#city").trigger('contentChanged');
                 }
             })
-                    .done(function (data) {
-                        $("#city").html(data);
-                        $("#city").trigger('contentChanged');
-                    })
+                .done(function (data) {
+                    $("#city").html(data);
+                    $("#city").trigger('contentChanged');
+                })
         });
     });
     
-    $(document).ready(function () {
-        $.ajax({
-            url: 'clients?action=load-cities&state_id=' + $("#state").val(),
-            beforeSend: function () {
-                $("#city").trigger('contentChanged');
-            }
-        })
-            .done(function (data) {
-                $("#city").append(data);
-                $("#city").trigger('contentChanged');
-            })
-    });
+   
     
     $("#use_another").change(function() {
-        $("#another_address").removeClass("hide");
+        if ($("#use_another").is(":checked")) {
+            $.ajax({
+                url: 'buy?action=load-address-form',
+                beforeSend: function () {
+                    $(".preloader-wrapper").addClass("active");
+                }
+            })
+                .done(function (data) {
+                    $(".preloader-wrapper").removeClass("active");
+                    $("#another_address").html(data);
+                });
+        } else {
+            $(".preloader-wrapper").removeClass("active");
+            $("#another_address").html("");
+        }
+        
     });
-    
-    $("#use_the_same").change(function() {
-        $("#another_address").addClass("hide");
-    });
-    
 </script>

@@ -33,6 +33,7 @@
     <body>
         <main>
             <div class="row">
+            <jsp:include page="../Layout/flash.jsp"/>
               <div class="col s12 m10 offset-m1">
                 <div class="card darken-1">
                   <div class="card-content black-text">

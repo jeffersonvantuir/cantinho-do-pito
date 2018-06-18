@@ -33,7 +33,7 @@
                 }
             }
             %>
-            <li><span class="circle badge white-text"><%= totalProductCart %></span><a href="buy?action=checkout"><i class="material-icons">shopping_cart</i></a></li>
+            <li><span class="circle badge white-text"><%= totalProductCart %></span><a href="buy?action=request-checkout"><i class="material-icons">shopping_cart</i></a></li>
         </ul>
     </div>
     <div class="nav-content black">

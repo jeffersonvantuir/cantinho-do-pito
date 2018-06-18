@@ -116,7 +116,7 @@ public class HomeController extends HttpServlet {
                     }
                 }
                 
-                response.sendRedirect("buy?action=checkout");
+                response.sendRedirect("buy?action=request-checkout");
                 
                 break;
                 
@@ -139,7 +139,7 @@ public class HomeController extends HttpServlet {
                         }
                     }
                     
-                    response.sendRedirect("buy?action=checkout");
+                    response.sendRedirect("buy?action=request-checkout");
                 break;
                 
             case "buy-more":
@@ -150,7 +150,7 @@ public class HomeController extends HttpServlet {
                         buyMore(productId, cart);
                     }
                     
-                    response.sendRedirect("buy?action=checkout");
+                    response.sendRedirect("buy?action=request-checkout");
                 break;
                 
             default:
