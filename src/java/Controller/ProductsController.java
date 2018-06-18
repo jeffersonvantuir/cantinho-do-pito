@@ -340,6 +340,8 @@ public class ProductsController extends HttpServlet {
             File uploadDir = new File(getServletContext().getRealPath("/") + "resources/img/Products");
             File file = File.createTempFile("img", ".png", uploadDir);
             item.write(file);
+            
+            System.out.println("FILENAME: " + file.getName());
         
             product.setImage(file.getName());
             

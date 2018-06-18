@@ -17,6 +17,14 @@
         <servlet-class>Controller.BrandsController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>HomeController</servlet-name>
+        <servlet-class>Controller.HomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BuyController</servlet-name>
+        <servlet-class>Controller.BuyController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AccessController</servlet-name>
         <servlet-class>Controller.AccessController</servlet-class>
     </servlet>
@@ -35,6 +43,14 @@
     <servlet-mapping>
         <servlet-name>BrandsController</servlet-name>
         <url-pattern>/brands</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeController</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyController</servlet-name>
+        <url-pattern>/buy</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AccessController</servlet-name>

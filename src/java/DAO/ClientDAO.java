@@ -45,6 +45,16 @@ public class ClientDAO {
                 client.setId(rs.getInt("id"));
                 client.setName(rs.getString("name"));
                 client.setEmail(rs.getString("email"));
+                client.setAddress(rs.getString("address"));
+                client.setDistrict(rs.getString("district"));
+                client.setComplement(rs.getString("complement"));
+                client.setHomeNumber(rs.getInt("home_number"));
+                client.setZipcode(rs.getString("zipcode"));
+                client.setCityId(rs.getInt("city_id"));
+                
+                CityDAO cityDAO = new CityDAO();
+                client.setCity(cityDAO.view(rs.getInt("city_id")));
+                
                 client.setIsAdmin(rs.getBoolean("is_admin"));
             }
 
