@@ -8,8 +8,8 @@ package Model;
 public class Request {
     private int id;
     private boolean status;
-    private int product_id;
-    private int client_id;
+    private int productId;
+    private int clientId;
     private Product product;
     private Client client;
 
@@ -29,20 +29,20 @@ public class Request {
         this.status = status;
     }
 
-    public int getProduct_id() {
-        return product_id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
-    public int getClient_id() {
-        return client_id;
+    public int getClientId() {
+        return clientId;
     }
 
-    public void setClient_id(int client_id) {
-        this.client_id = client_id;
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public Product getProduct() {

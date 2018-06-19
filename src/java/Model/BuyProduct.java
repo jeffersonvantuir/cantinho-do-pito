@@ -11,6 +11,7 @@ public class BuyProduct {
     int productId;
     String buyId;
     Product product;
+    Buy buy;
 
     public int getId() {
         return id;
@@ -58,5 +59,13 @@ public class BuyProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Buy getBuy() {
+        return buy;
+    }
+
+    public void setBuy(Buy buy) {
+        this.buy = buy;
     }
 }

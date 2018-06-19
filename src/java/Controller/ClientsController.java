@@ -70,8 +70,9 @@ public class ClientsController extends HttpServlet {
                         if (request.getSession().getAttribute("complete_purchase") != null) {
                             response.sendRedirect("buy?action=complete-purchase");
                         } else {
-                            rd = request.getRequestDispatcher("clients?action=request-login");
-                            rd.forward(request, response);
+                            response.sendRedirect("home");
+                            //rd = request.getRequestDispatcher("home");
+                            //rd.forward(request, response);
                         }
                     } else {
                         request.setAttribute("error", "E-mail ou senha icorretos.");

@@ -246,7 +246,6 @@ public class ProductDAO {
             pstmt.close();
             rs.close();
 
-            this.conn.close();
 
             return product;
 
