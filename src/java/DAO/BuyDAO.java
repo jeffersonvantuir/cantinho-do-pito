@@ -1,10 +1,13 @@
 package DAO;
 
 import Model.Buy;
+import Model.BuyProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,7 +25,7 @@ public class BuyDAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
+        
     public boolean add(Buy buy)
     {
         try {
@@ -83,4 +86,71 @@ public class BuyDAO {
             return false;
         }
     }
+    
+        
+    public Buy view(String id)
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM buy WHERE id = ?");
+            pstmt.setString(1, id);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            Buy buy = new Buy();
+            while (rs.next()) {
+                buy.setId(rs.getString("id"));
+                buy.setDate(rs.getString("date"));
+                buy.setTotalPrice(rs.getDouble("total_price"));
+                buy.setAuthorized(rs.getBoolean("authorized"));
+                buy.setAddressId(rs.getString("address_id"));
+                buy.setClientId(rs.getInt("client_id"));
+            }
+            
+            pstmt.close();
+            this.conn.close();
+            
+            return buy;
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public List<Buy> getClientRequests(int clientId)
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM buy WHERE client_id = ?");
+            pstmt.setInt(1, clientId);
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Buy> listBuy = new ArrayList<Buy>();
+            
+            while (rs.next()) {
+                Buy buy = new Buy();
+                buy.setId(rs.getString("id"));
+                buy.setAuthorized(rs.getBoolean("authorized"));
+                buy.setDate(rs.getString("date"));
+                buy.setClientId(rs.getInt("client_id"));
+                buy.setTotalPrice(rs.getDouble("total_price"));
+                buy.setAddressId(rs.getString("address_id"));
+                
+                BuyProductDAO buyProductDAO = new BuyProductDAO();
+                buy.setListBuyProduct(buyProductDAO.getClientRequests(buy.getId()));
+                
+                listBuy.add(buy);
+            }
+            pstmt.execute();
+            pstmt.close();
+            
+            return listBuy;
+            
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+    
 }

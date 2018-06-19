@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.List;
+
 /**
  *
  * @author jefferson
@@ -11,6 +13,7 @@ public class Buy {
    boolean authorized;
    int clientId;
    String addressId;
+   List<BuyProduct> listBuyProduct;
 
     public String getId() {
         return id;
@@ -58,5 +61,13 @@ public class Buy {
 
     public void setAddressId(String addressId) {
         this.addressId = addressId;
+    }
+
+    public List<BuyProduct> getListBuyProduct() {
+        return listBuyProduct;
+    }
+
+    public void setListBuyProduct(List<BuyProduct> listBuyProduct) {
+        this.listBuyProduct = listBuyProduct;
     }
 }

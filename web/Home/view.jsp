@@ -58,10 +58,14 @@
                                     </a>
                                 </div>
                             <% } else { %>
-                                <a id="notify-me" class="waves-effect waves-light btn amber lighten-1 col s12 m7">
-                                    <i class="material-icons left">notification_important</i>
-                                    Avisar-me quando disponível
-                                </a>
+                                <% if (request.getSession().getAttribute("client") != null) { %>
+                                    <a href="requests?action=notify-me&product_id=<%= product.getId() %>" class="waves-effect waves-light btn amber lighten-1 col s12 m7">
+                                        <i class="material-icons left">notification_important</i>
+                                        Avisar-me quando disponível
+                                    </a>
+                                <% } else { %>        
+                                    <p class="red-text">Para solicitar o produto, faça login</p>
+                                <% } %>
                             <% } %>
                         </div>
                     </div>

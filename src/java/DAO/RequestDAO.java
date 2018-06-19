@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -31,10 +33,12 @@ public class RequestDAO {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO requests (product_id, client_id) VALUES (?, ?)");
 
-            pstmt.setString(1, String.valueOf(request.getProduct_id()));
-            pstmt.setString(2, String.valueOf(request.getClient_id()));
+            pstmt.setString(1, String.valueOf(request.getProductId()));
+            pstmt.setString(2, String.valueOf(request.getClientId()));
             pstmt.executeUpdate();
             pstmt.close();
+            this.conn.close();
+            
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,8 +60,8 @@ public class RequestDAO {
             while (rs.next()) {
                 request.setId(rs.getInt("id"));
                 request.setStatus(Boolean.parseBoolean(rs.getString("re.status")));
-                request.setProduct_id(Integer.parseInt(rs.getString("re.product_id")));
-                request.setClient_id(Integer.parseInt(rs.getString("re.client_id")));
+                request.setProductId(Integer.parseInt(rs.getString("re.product_id")));
+                request.setClientId(Integer.parseInt(rs.getString("re.client_id")));
 
                 product.setId(Integer.parseInt(rs.getString("pr.id")));
                 product.setName(rs.getString("pr.name"));
@@ -74,8 +78,44 @@ public class RequestDAO {
 
             pstmt.close();
             rs.close();
+            this.conn.close();
 
             return request;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public List<Request> getClientsRequests(int clientId) 
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM requests WHERE client_id = ?");
+            pstmt.setInt(1, clientId);
+            ResultSet rs = pstmt.executeQuery();
+
+            ProductDAO productDAO = new ProductDAO();
+            ClientDAO clientDAO = new ClientDAO();
+            List<Request> listRequests = new ArrayList<Request>();
+
+            while (rs.next()) {
+                Request request = new Request();
+                request.setId(rs.getInt("id"));
+                request.setStatus(rs.getBoolean("status"));
+                request.setProductId(rs.getInt("product_id"));
+                request.setClientId(rs.getInt("client_id"));
+
+                request.setProduct(productDAO.view(request.getProductId()));
+                request.setClient(clientDAO.view(request.getClientId()));
+                
+                listRequests.add(request);
+            }
+
+            pstmt.close();
+            rs.close();
+            
+            return listRequests;
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

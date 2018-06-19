@@ -1,3 +1,4 @@
+<%@page import="Model.Client"%>
 <%@page import="Model.Category"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -7,7 +8,19 @@
     <div class="nav-wrapper black">
         <a href="" class="brand-logo left"><img class="circle logo" src="/cantinho-do-pito/resources/img/logo.png"></a>
         <ul>
-            <li class="right"><a href="buy?action=checkout"><i class="material-icons">exit_to_app</i></a></li>
+            <% if (request.getSession().getAttribute("client") != null) { %>
+                <% Client client = (Client) request.getSession().getAttribute("client"); %>
+                <a class='dropdown-trigger right' href='#' data-target='actions'><%= client.getName() %></a>
+                    <ul id='actions' class='dropdown-content'>
+                        <% if (client.isIsAdmin()) { %>
+                            <li><a href="dashboard" class="black-text"><i class="material-icons">dashboard</i>Dashboard</a></li>
+                        <% } %>
+                      <li><a href="requests?action=my-requests" class="black-text"><i class="material-icons">view_module</i>Meus pedidos</a></li>
+                      <li><a href="access?action=logout" class="black-text"><i class="material-icons">exit_to_app</i>Sair</a></li>
+                    </ul>
+            <% } else { %>
+                <li class="right"><a href="clients?action=request-login">Entrar</a></li>
+            <% } %>
         </ul>
         <form class="brand-logo center hide-on-small-and-down" method="post" action="home">
             <div class="input-field">
@@ -43,9 +56,12 @@
             <% Iterator i = listCategories.iterator(); %>
             <% while (i.hasNext()) { %>
                 <% Category category = (Category) i.next(); %>
-            <li class="tab"><a href="?category_id=<%= category.getId() %>"><%= category.getName() %></a></li>
+            <li class="tab"><a href="home?category_id=<%= category.getId() %>"><%= category.getName() %></a></li>
             <% } %>
         </ul>
         
     </div>
 </nav>
+<script>
+    $('.dropdown-trigger').dropdown();
+</script>
