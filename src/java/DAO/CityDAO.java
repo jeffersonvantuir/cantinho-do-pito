@@ -54,6 +54,33 @@ public class CityDAO {
         }
     }
     
+    public City view (int id)
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM cities WHERE id = ?");
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            City city = new City();
+            while (rs.next()) {
+                city.setId(rs.getInt("id"));
+                city.setName(rs.getString("name"));
+                
+                StateDAO stateDAO = new StateDAO();
+                city.setState(stateDAO.view(rs.getInt("state_id")));
+            }
+
+            pstmt.close();
+            rs.close();
+
+            return city;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+    
     public int getStateIdByCityId(int id)
     {
         try {
