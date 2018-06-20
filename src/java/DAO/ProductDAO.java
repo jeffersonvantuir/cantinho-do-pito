@@ -185,10 +185,72 @@ public class ProductDAO {
         }
     }
 
-    public List requests() 
-    {
+    public List requests() throws SQLException {
         try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT pr.* FROM requests re, products pr WHERE re.product_id = pr.id AND re.status = FALSE ORDER BY pr.name");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT pr.id, pr.name, pr.description, pr.price, pr.stock, pr.brand_id, pr.category_id, pr.image, count(re.product_id) as requests FROM requests re, products pr  WHERE re.product_id = pr.id AND re.status = FALSE GROUP BY pr.id, pr.name, pr.description, pr.price, pr.stock, pr.brand_id, pr.category_id, pr.image ORDER BY pr.name");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Product> listProducts = new ArrayList<Product>();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("pr.id"));
+                product.setName(rs.getString("pr.name"));
+                product.setDescription(rs.getString("pr.description"));
+                product.setPrice(rs.getDouble("pr.price"));
+                product.setStock(rs.getInt("pr.stock"));
+                product.setImage(rs.getString("pr.image"));
+                product.setCategoryId(rs.getInt("pr.category_id"));
+                product.setBrandId(rs.getInt("pr.brand_id"));
+                product.setRequests(rs.getInt("requests"));
+
+                CategoryDAO categoryDAO = new CategoryDAO();
+                product.setCategory(categoryDAO.view(product.getCategoryId()));
+
+                BrandDAO brandDAO = new BrandDAO();
+                product.setBrand(brandDAO.view(product.getBrandId()));
+
+                listProducts.add(product);
+            }
+
+            pstmt.close();
+            rs.close();
+            this.conn.close();
+
+            return listProducts;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            this.conn.close();
+            return null;
+        }
+    }
+
+    public int lowStock() throws SQLException {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(pr.id) as products FROM products pr WHERE pr.stock < 10");
+            ResultSet rs = pstmt.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+                count = rs.getInt("products");
+            }
+
+            pstmt.close();
+            rs.close();
+            this.conn.close();
+
+            return count;
+        } catch (SQLException e) {
+            this.conn.close();
+            System.out.println("Error: " + e.getMessage());
+            return 0;
+        }
+    }
+    
+    public List listLowStock() throws SQLException {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE stock < 10");
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -217,12 +279,14 @@ public class ProductDAO {
             pstmt.close();
             rs.close();
 
+            this.conn.close();
+
             return listProducts;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
-
 }

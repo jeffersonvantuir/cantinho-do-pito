@@ -11,6 +11,15 @@ public class Product {
     private int brandId;
     private Category category;
     private Brand brand;
+    private int requests;
+
+    public int getRequests() {
+        return requests;
+    }
+
+    public void setRequests(int requests) {
+        this.requests = requests;
+    }
 
     public int getId() {
         return id;

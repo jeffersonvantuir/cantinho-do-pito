@@ -19,17 +19,24 @@
 <ul id="products" class="dropdown-content">
     <li><a href="products" class="waves-effect"><i class="material-icons">list</i>Listar Produtos</a></li>
     <li><a href="products?action=request-add" class="waves-effect"><i class="material-icons">add</i>Adicionar Produtos</a></li>
+    <li><a href="products?action=requests" class="waves-effect"><i class="material-icons">assignment_turned_in</i>Solicitações de Produtos</a></li>
+    <li><a href="products?action=-low-stock" class="waves-effect"><i class="material-icons">assignment_late</i>Estoques Baixos</a></li>
 </ul>
 
 <ul id="slide-out" class="sidenav">
-    <li><div class="user-view">
-            <div class="background">
-                <img src="/cantinho-do-pito/resources/img/fundo.jpg">
-            </div>
-            <img class="circle" src="/cantinho-do-pito/resources/img/logo.png">
-            <h5 class="white-text">Cantinho do Pito</h5>
-            <br>
-        </div></li>
+    <li>
+        <div class="user-view">
+            <a href="dashboard" title="Dashboard">
+
+                <div class="background">
+                    <img src="/cantinho-do-pito/resources/img/fundo.jpg">
+                </div>
+                <img class="circle" src="/cantinho-do-pito/resources/img/logo.png">
+                <h5 class="white-text">Cantinho do Pito</h5>
+                <br>
+            </a>
+        </div>
+    </li>
     <li><a><i class="material-icons">send</i>Ações</a></li>
     <li><div class="divider"></div></li>
     <li>

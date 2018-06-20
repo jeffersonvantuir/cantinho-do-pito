@@ -67,6 +67,11 @@ public class ClientsController extends HttpServlet {
                     if (client.getEmail() != null) {
                         session.setAttribute("client", client);
                         request.setAttribute("success", "Login realizado com sucesso.");
+                        if (client.isIsAdmin()) {
+                            rd = request.getRequestDispatcher("dashboard");
+                            rd.forward(request, response);
+                            break;
+                        }
                         if (request.getSession().getAttribute("complete_purchase") != null) {
                             response.sendRedirect("buy?action=complete-purchase");
                         } else {

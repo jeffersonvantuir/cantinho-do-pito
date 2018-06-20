@@ -20,6 +20,14 @@
         <servlet-name>AccessController</servlet-name>
         <servlet-class>Controller.AccessController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RequestsController</servlet-name>
+        <servlet-class>Controller.RequestsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DashboardController</servlet-name>
+        <servlet-class>Controller.DashboardController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ClientsController</servlet-name>
         <url-pattern>/clients</url-pattern>
@@ -39,6 +47,14 @@
     <servlet-mapping>
         <servlet-name>AccessController</servlet-name>
         <url-pattern>/access</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RequestsController</servlet-name>
+        <url-pattern>/requests</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardController</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

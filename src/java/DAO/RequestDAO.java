@@ -82,4 +82,26 @@ public class RequestDAO {
             return null;
         }
     }
+    
+    
+    public int allrequests() throws SQLException {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(re.id) as requests FROM requests re WHERE re.status = FALSE");
+            ResultSet rs = pstmt.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+                count = rs.getInt("requests");
+            }
+
+            pstmt.close();
+            rs.close();
+            this.conn.close();
+
+            return count;
+        } catch (SQLException e) {
+            this.conn.close();
+            System.out.println("Error: " + e.getMessage());
+            return 0;
+        }
+    }
 }
