@@ -18,8 +18,7 @@ public class RequestDAO {
 
     private Connection conn;
 
-    public RequestDAO() 
-    {
+    public RequestDAO() {
         try {
             this.conn = ConnectionFactory.getConnection();
 
@@ -28,8 +27,7 @@ public class RequestDAO {
         }
     }
 
-    public boolean add(Request request) 
-    {
+    public boolean add(Request request) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO requests (product_id, client_id) VALUES (?, ?)");
 
@@ -38,7 +36,7 @@ public class RequestDAO {
             pstmt.executeUpdate();
             pstmt.close();
             this.conn.close();
-            
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,8 +44,7 @@ public class RequestDAO {
         }
     }
 
-    public Request view(int id) 
-    {
+    public Request view(int id) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT re.*, pr.*, cli.* FROM requests re, products pr, clients cl WHERE re.product_id = pr.id AND re.client_id = cl.id AND re.id = ?");
             pstmt.setInt(1, id);
@@ -87,9 +84,28 @@ public class RequestDAO {
             return null;
         }
     }
+
+    public int getAllRequests() throws SQLException {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(re.id) as requests FROM requests re WHERE re.status = FALSE");
+            ResultSet rs = pstmt.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+                count = rs.getInt("requests");
+            }
+            this.conn.close();
+            return count;
+        } catch (SQLException e) {
+            this.conn.close();
+            System.out.println("Error: " + e.getMessage());
+            return 0;
+        }
+    }
     
-    public List<Request> getClientsRequests(int clientId) 
-    {
+
+    
+
+    public List<Request> getClientsRequests(int clientId) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM requests WHERE client_id = ?");
             pstmt.setInt(1, clientId);
@@ -108,13 +124,13 @@ public class RequestDAO {
 
                 request.setProduct(productDAO.view(request.getProductId()));
                 request.setClient(clientDAO.view(request.getClientId()));
-                
+
                 listRequests.add(request);
             }
 
             pstmt.close();
             rs.close();
-            
+
             return listRequests;
 
         } catch (SQLException e) {
