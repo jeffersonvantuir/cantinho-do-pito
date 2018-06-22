@@ -1,10 +1,11 @@
 <%-- 
-    Document   : index
-    Created on : 09/06/2018, 14:20:32
+    Document   : buy_requests
+    Created on : 21/06/2018, 21:35:41
     Author     : ricardo
 --%>
+<%@page import="Helpers.Helper"%>
+<%@page import="Model.Buy"%>
 <%@page import="Controller.AccessController"%>
-<%@ page import="Model.Category" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
@@ -12,47 +13,53 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Categorias</title>
+        <title>Lista de Compras</title>
         <jsp:include page="../Layout/default.jsp"/>
         <jsp:include page="../Layout/timeout.jsp"/>
     </head>
     <body>
-        <%--<jsp:include page="../Layout/timeout.jsp"/>--%>
         <jsp:include page="../Layout/navbar.jsp"/>
         <main>
             <jsp:include page="../Layout/sidenav.jsp"/>
             <div class="row">
                 <jsp:include page="../Layout/flash.jsp"/>
-                <div class="col s12 m6 offset-s3 l6 offset-l3">
+                <div class="col s12 m10 offset-m1 l10 offset-l1">
                     <div class="card">
                         <div class="card-content">
-                            <span class="card-title">Categorias</span>
+                            <span class="card-title">Lista de Compras</span>
                             <table class="striped responsive-table">
                                 <thead>
                                     <tr>
-                                        <th>Nome</th>
-                                        <th>Descrição</th>
+                                        <th>Nome do Cliente</th>
+                                        <th>CPF</th>
+                                        <th>E-mail</th>
+                                        <th>Celular</th>
+                                        <th>Preço Total</th>
+                                        <th>Data da Compra</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <%
-                                        if (request.getAttribute("listCategories") != null) {
-                                            List<Category> listCategories = (List<Category>) request.getAttribute("listCategories");
-                                            Iterator i = listCategories.iterator();
+                                        if (request.getAttribute("listBuyRequests") != null) {
+                                            List<Buy> listBuyRequests = (List<Buy>) request.getAttribute("listBuyRequests");
+                                            Iterator i = listBuyRequests.iterator();
+                                            Helper helper = new Helper();
+
                                             while (i.hasNext()) {
-                                                Category category = (Category) i.next();
+                                                Buy buy = (Buy) i.next();
                                     %>
                                     <tr>
-                                        <td><%= category.getName()%></td>
-                                        <td><%= category.getDescription()%></td>
+                                        <td><%= buy.getClient().getName()%></td>
+                                        <td><%= buy.getClient().getCpf()%></td>
+                                        <td><%= buy.getClient().getEmail()%></td>
+                                        <td><%= buy.getClient().getCellphone()%></td>
+                                        <td><%= String.format("R$ %,.2f", buy.getTotalPrice()).replace(",", ".")%></td>
+                                        <td><%= helper.formatterDateUsage(buy.getDate())%></td>
                                         <td>
-                                            <a href="categories?action=request-edit&id=<%= category.getId()%>">
-                                                <i class="material-icons" title="Excluir">edit</i>
-                                            </a>&nbsp
-                                            <a href="categories?action=delete&id=<%= category.getId()%>"  onclick="return confirm('Deseja excluir a categoria <%= category.getName()%>?')">
-                                                <i class="material-icons" title="Excluir">delete</i>
-                                            </a>&nbsp
+                                            <a href="buy?action=accept-purchase&id=<%= buy.getId()%>">
+                                                <i class="material-icons" title="Aceitar Compra">assignment_turned_in</i>
+                                            </a>
                                         </td>
                                     </tr>
                                     <% }

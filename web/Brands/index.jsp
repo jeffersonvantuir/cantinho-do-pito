@@ -45,7 +45,7 @@
                                         <td><%= brand.getName()%></td>
                                         <td>
                                             <a href="brands?action=request-edit&id=<%= brand.getId()%>">
-                                                <i class="material-icons" title="Excluir">edit</i>
+                                                <i class="material-icons" title="Editar">edit</i>
                                             </a>&nbsp
                                             <a href="brands?action=delete&id=<%= brand.getId()%>"  onclick="return confirm('Deseja excluir a marca <%= brand.getName()%>?')">
                                                 <i class="material-icons" title="Excluir">delete</i>
@@ -63,6 +63,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </main>
         <jsp:include page="../Layout/footer.jsp"/>
     </body>

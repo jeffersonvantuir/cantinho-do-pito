@@ -1,4 +1,3 @@
-
 package DAO;
 
 import Model.Brand;
@@ -14,10 +13,10 @@ import java.util.List;
  * @author ricardo
  */
 public class BrandDAO {
+
     private Connection conn;
-    
-    public BrandDAO()
-    {
+
+    public BrandDAO() {
         try {
             this.conn = ConnectionFactory.getConnection();
 
@@ -25,10 +24,9 @@ public class BrandDAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
-    public List index()
-    {
-       try {
+
+    public List index() throws SQLException {
+        try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM brands ORDER BY NAME");
 
             ResultSet rs = pstmt.executeQuery();
@@ -49,30 +47,30 @@ public class BrandDAO {
             return listBrands;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
-    
-    public boolean add(Brand brand)
-    {
+
+    public boolean add(Brand brand) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO brands (name) VALUES (?)");
 
             pstmt.setString(1, brand.getName());
             pstmt.executeUpdate();
             pstmt.close();
-            
+            this.conn.close();
             return true;
-            
+
         } catch (SQLException e) {
-           e.printStackTrace();
+            this.conn.close();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public boolean edit(Brand brand)
-    {
+
+    public boolean edit(Brand brand) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("UPDATE brands SET name = ? WHERE id = ?");
 
@@ -80,18 +78,18 @@ public class BrandDAO {
             pstmt.setInt(2, brand.getId());
             pstmt.executeUpdate();
             pstmt.close();
-            
+            this.conn.close();
             return true;
-            
+
         } catch (SQLException e) {
-           e.printStackTrace();
+            this.conn.close();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public Brand view(int id)
-    {
-       try {
+
+    public Brand view(int id) throws SQLException {
+        try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM brands WHERE id = ?");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -105,28 +103,29 @@ public class BrandDAO {
 
             pstmt.close();
             rs.close();
-
+            this.conn.close();
             return brand;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
-    
-    public boolean delete(Brand brand)
-    {
+
+    public boolean delete(Brand brand) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM brands WHERE id = ?");
 
             pstmt.setInt(1, brand.getId());
             pstmt.executeUpdate();
             pstmt.close();
-            
+            this.conn.close();
             return true;
-            
+
         } catch (SQLException e) {
-           e.printStackTrace();
+            this.conn.close();
+            e.printStackTrace();
             return false;
         }
     }

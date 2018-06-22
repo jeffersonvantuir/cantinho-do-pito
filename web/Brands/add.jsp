@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Adicionar Categoria</title>
+        <title>Adicionar Marca</title>
         <jsp:include page="../Layout/default.jsp"/>
         <jsp:include page="../Layout/timeout.jsp"/>
     </head>

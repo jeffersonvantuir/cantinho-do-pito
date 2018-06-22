@@ -62,6 +62,7 @@ public class ProductsController extends HttpServlet {
         List<FileItem> items = null;
         Iterator<FileItem> iter = null;
         List<Product> listProducts = null;
+        List<Product> listRequests = null;
         
         String action = request.getParameter("action");
         
@@ -240,6 +241,22 @@ public class ProductsController extends HttpServlet {
                     request.setAttribute("error", "Falha ao excluir Produto. Por favor, tente novamente.");
                 }
                 rd = request.getRequestDispatcher("/products?action=index");
+                rd.forward(request, response);
+                break;
+
+             case "requests":
+                productDAO = new ProductDAO();
+                listRequests = productDAO.requests();
+                request.setAttribute("listRequests", listRequests);
+                rd = request.getRequestDispatcher("Products/requests.jsp");
+                rd.forward(request, response);
+                break;
+                 
+             case "low-stock":
+                productDAO = new ProductDAO();
+                listProducts = productDAO.listLowStock();
+                request.setAttribute("listProducts", listProducts);
+                rd = request.getRequestDispatcher("Products/low_stock.jsp");
                 rd.forward(request, response);
                 break;
                 

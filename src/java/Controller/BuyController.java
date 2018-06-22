@@ -12,21 +12,17 @@ import DAO.CategoryDAO;
 import DAO.CityDAO;
 import DAO.ProductDAO;
 import DAO.StateDAO;
-import Helpers.Helper;
 import Model.Address;
 import Model.Buy;
 import Model.BuyProduct;
 import Model.Category;
-import Model.City;
 import Model.Client;
 import Model.Product;
 import Model.State;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -54,110 +50,120 @@ public class BuyController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=ISO-8859-1");
-        
+
         RequestDispatcher rd = null;
         CategoryDAO categoryDAO = null;
         ProductDAO productDAO = null;
         Product product = new Product();
         List<Category> listCategories = null;
         List<Product> listProducts = null;
-        
-        if (request.getSession().getAttribute("cart") == null) {
-            response.sendRedirect("home");
-        } else {
-            String action = request.getParameter("action");
-        
-            if (action == null) {
-                action  = "";
-            }
+        BuyDAO buyDAO = new BuyDAO();
 
-            switch (action) {
-                case "request-checkout":
-                    categoryDAO = new CategoryDAO();
+        String action = request.getParameter("action");
 
-                    listCategories = categoryDAO.index();
-                    request.setAttribute("listCategories", listCategories);
-                    rd = request.getRequestDispatcher("Buy/checkout.jsp");
-                    rd.forward(request, response);
-                    break;
-
-                case "complete-purchase":
-                    if (request.getSession().getAttribute("client") == null || request.getSession().getAttribute("client").equals("")) {
-
-                        request.getSession().setAttribute("complete_purchase", true);
-                        response.sendRedirect("clients?action=request-login");
-                    } else {
-                        categoryDAO = new CategoryDAO();
-                        listCategories = categoryDAO.index();
-                        CityDAO cityDAO = new CityDAO();
-                        StateDAO stateDAO = new StateDAO();
-
-                        List listStates = stateDAO.list();
-
-                        request.setAttribute("listCategories", listCategories);
-                        request.setAttribute("listStates", listStates);
-                        rd = request.getRequestDispatcher("Buy/complete_purchase.jsp");
-                        rd.forward(request, response);    
-                    }
-                    break;
-                    
-                case "checkout":
-                    if (request.getParameter("option") != null) {
-                        Address address = new Address();
-                        UUID uuid = UUID.randomUUID();
-                        
-                        address.setId(String.valueOf(uuid));
-                        address.setAddress(request.getParameter("address"));
-                        address.setComplement(request.getParameter("complement"));
-                        address.setDistrict(request.getParameter("district"));
-                        
-                        if (request.getParameter("home_number").equals("")) {
-                            address.setHomeNumber(0);
-                        } else {
-                            address.setHomeNumber(Integer.parseInt(request.getParameter("home_number")));
-                        }
-                        
-                        address.setZipcode(request.getParameter("zipcode"));
-                        address.setCityId(Integer.parseInt(request.getParameter("city")));
-                        
-                        saveBuy(address, request, response);
-                        
-                    } else {
-                        Address address = new Address();
-                        UUID uuid = UUID.randomUUID();
-                        Client client = (Client) request.getSession().getAttribute("client");
-                        
-                        address.setId(String.valueOf(uuid));
-                        address.setAddress(client.getAddress());
-                        address.setComplement(client.getComplement());
-                        address.setDistrict(client.getDistrict());
-                        address.setHomeNumber(client.getHomeNumber());
-                        address.setZipcode(client.getZipcode());
-                        address.setCityId(client.getCityId());
-                        
-                        saveBuy(address, request, response);
-                    }
-                    break;
-                    
-                case "load-address-form":
-                    State state = new State();
-                    CityDAO cityDAO = new CityDAO();
-                    
-                    state.setId(1);
-                    StateDAO stateDAO = new StateDAO();
-                    List<State> listStates = stateDAO.list();
-                    
-                    request.setAttribute("listStates", listStates);
-                    rd = request.getRequestDispatcher("Buy/address.jsp");
-                    rd.forward(request, response);
-                    break;
-                default:
-                    response.sendRedirect("home");
-            }
+        if (action == null) {
+            action = "";
         }
-        
+
+        switch (action) {
+            case "request-checkout":
+                categoryDAO = new CategoryDAO();
+
+                listCategories = categoryDAO.index();
+                request.setAttribute("listCategories", listCategories);
+                rd = request.getRequestDispatcher("Buy/checkout.jsp");
+                rd.forward(request, response);
+                break;
+
+            case "complete-purchase":
+                if (request.getSession().getAttribute("client") == null || request.getSession().getAttribute("client").equals("")) {
+
+                    request.getSession().setAttribute("complete_purchase", true);
+                    response.sendRedirect("clients?action=request-login");
+                } else {
+                    categoryDAO = new CategoryDAO();
+                    listCategories = categoryDAO.index();
+                    CityDAO cityDAO = new CityDAO();
+                    StateDAO stateDAO = new StateDAO();
+
+                    List listStates = stateDAO.list();
+
+                    request.setAttribute("listCategories", listCategories);
+                    request.setAttribute("listStates", listStates);
+                    rd = request.getRequestDispatcher("Buy/complete_purchase.jsp");
+                    rd.forward(request, response);
+                }
+                break;
+
+            case "checkout":
+                if (request.getParameter("option") != null) {
+                    Address address = new Address();
+                    UUID uuid = UUID.randomUUID();
+
+                    address.setId(String.valueOf(uuid));
+                    address.setAddress(request.getParameter("address"));
+                    address.setComplement(request.getParameter("complement"));
+                    address.setDistrict(request.getParameter("district"));
+
+                    if (request.getParameter("home_number").equals("")) {
+                        address.setHomeNumber(0);
+                    } else {
+                        address.setHomeNumber(Integer.parseInt(request.getParameter("home_number")));
+                    }
+
+                    address.setZipcode(request.getParameter("zipcode"));
+                    address.setCityId(Integer.parseInt(request.getParameter("city")));
+
+                    saveBuy(address, request, response);
+
+                } else {
+                    Address address = new Address();
+                    UUID uuid = UUID.randomUUID();
+                    Client client = (Client) request.getSession().getAttribute("client");
+
+                    address.setId(String.valueOf(uuid));
+                    address.setAddress(client.getAddress());
+                    address.setComplement(client.getComplement());
+                    address.setDistrict(client.getDistrict());
+                    address.setHomeNumber(client.getHomeNumber());
+                    address.setZipcode(client.getZipcode());
+                    address.setCityId(client.getCityId());
+
+                    saveBuy(address, request, response);
+                }
+                break;
+
+            case "load-address-form":
+                State state = new State();
+                CityDAO cityDAO = new CityDAO();
+
+                state.setId(1);
+                StateDAO stateDAO = new StateDAO();
+                List<State> listStates = stateDAO.list();
+
+                request.setAttribute("listStates", listStates);
+                rd = request.getRequestDispatcher("Buy/address.jsp");
+                rd.forward(request, response);
+                break;
+            case "list-buys":
+                request.setAttribute("listBuyRequests", buyDAO.getBuyRequests());
+                rd = request.getRequestDispatcher("Buy/buy_requests.jsp");
+                rd.forward(request, response);
+                break;
+            case "accept-purchase":
+                if (buyDAO.updateAuthorized(request.getParameter("id"))) {
+                    request.setAttribute("success", "Compra aceita com sucesso.");
+                } else {
+                    request.setAttribute("success", "Falha ao aceitar compra. Tente novamente.");
+                }
+                rd = request.getRequestDispatcher("buy?action=list-buys");
+                rd.forward(request, response);
+                break;
+            default:
+                response.sendRedirect("home");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -172,7 +178,11 @@ public class BuyController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(BuyController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -186,7 +196,11 @@ public class BuyController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(BuyController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -199,8 +213,7 @@ public class BuyController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void saveBuy(Address address, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    private void saveBuy(Address address, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         RequestDispatcher rd = null;
         AddressDAO addressDAO = new AddressDAO();
         boolean successfully = true;
@@ -218,7 +231,7 @@ public class BuyController extends HttpServlet {
 
             while (i.hasNext()) {
                 BuyProduct buyProduct = i.next();
-                Date date = new Date();                                
+                Date date = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                 buy.setId(buyProduct.getBuyId());
