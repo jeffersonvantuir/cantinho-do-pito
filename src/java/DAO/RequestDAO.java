@@ -27,7 +27,7 @@ public class RequestDAO {
         }
     }
 
-    public boolean add(Request request) {
+    public boolean add(Request request) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO requests (product_id, client_id) VALUES (?, ?)");
 
@@ -39,12 +39,13 @@ public class RequestDAO {
 
             return true;
         } catch (SQLException e) {
+            this.conn.close();
             e.printStackTrace();
             return false;
         }
     }
 
-    public Request view(int id) {
+    public Request view(int id) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT re.*, pr.*, cli.* FROM requests re, products pr, clients cl WHERE re.product_id = pr.id AND re.client_id = cl.id AND re.id = ?");
             pstmt.setInt(1, id);
@@ -80,6 +81,7 @@ public class RequestDAO {
             return request;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
         }
@@ -101,11 +103,8 @@ public class RequestDAO {
             return 0;
         }
     }
-    
 
-    
-
-    public List<Request> getClientsRequests(int clientId) {
+    public List<Request> getClientsRequests(int clientId) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM requests WHERE client_id = ?");
             pstmt.setInt(1, clientId);
@@ -134,6 +133,7 @@ public class RequestDAO {
             return listRequests;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
         }

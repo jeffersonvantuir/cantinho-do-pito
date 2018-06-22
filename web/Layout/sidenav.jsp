@@ -16,6 +16,9 @@
     <li><a href="clients" class="waves-effect"><i class="material-icons">list</i>Listar Clientes</a></li>
     <li><a href="clients?action=request-add" class="waves-effect"><i class="material-icons">add</i>Adicionar Clientes</a></li>
 </ul>
+<ul id="buys" class="dropdown-content">
+    <li><a href="buy?action=list-buys" class="waves-effect"><i class="material-icons">assignment_turned_in</i>Compras Pendentes</a></li>
+</ul>
 <ul id="products" class="dropdown-content">
     <li><a href="products" class="waves-effect"><i class="material-icons">list</i>Listar Produtos</a></li>
     <li><a href="products?action=request-add" class="waves-effect"><i class="material-icons">add</i>Adicionar Produtos</a></li>
@@ -44,6 +47,9 @@
     </li>
     <li>
         <a class="dropdown-trigger" href="#!" data-target="clients">Clientes<i class="material-icons right">keyboard_arrow_right</i></a>
+    </li>
+    <li>
+        <a class="dropdown-trigger" href="#!" data-target="buys">Compras<i class="material-icons right">keyboard_arrow_right</i></a>
     </li>
     <li>
         <a class="dropdown-trigger" href="#!" data-target="products">Produtos<i class="material-icons right">keyboard_arrow_right</i></a>

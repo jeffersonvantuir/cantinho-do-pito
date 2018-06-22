@@ -65,12 +65,12 @@ public class ProductDAO {
             return null;
         }
     }
-    
+
     public List index(int categoryId) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE category_id = ?");
             pstmt.setInt(1, categoryId);
-            
+
             ResultSet rs = pstmt.executeQuery();
 
             List<Product> listProducts = new ArrayList<Product>();
@@ -107,16 +107,16 @@ public class ProductDAO {
             return null;
         }
     }
-    
+
     public List index(String search) {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products p, categories c, brands b "
                     + "WHERE p.category_id = c.id AND p.brand_id = b.id AND"
                     + " (p.name LIKE ? OR c.name LIKE ? OR b.name LIKE ?)");
-            pstmt.setString(1, '%'+search+'%');
-            pstmt.setString(2, '%'+search+'%');
-            pstmt.setString(3, '%'+search+'%');
-            
+            pstmt.setString(1, '%' + search + '%');
+            pstmt.setString(2, '%' + search + '%');
+            pstmt.setString(3, '%' + search + '%');
+
             ResultSet rs = pstmt.executeQuery();
 
             List<Product> listProducts = new ArrayList<Product>();
@@ -154,7 +154,7 @@ public class ProductDAO {
         }
     }
 
-    public boolean add(Product product) {
+    public boolean add(Product product) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO products (name, description, price, stock, image, category_id, brand_id)"
                     + " VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -173,12 +173,13 @@ public class ProductDAO {
 
             return true;
         } catch (SQLException e) {
+            this.conn.close();
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean edit(Product product) {
+    public boolean edit(Product product) throws SQLException {
         try {
             PreparedStatement pstmt = null;
 
@@ -212,6 +213,7 @@ public class ProductDAO {
 
             return true;
         } catch (SQLException e) {
+            this.conn.close();
             e.printStackTrace();
             return false;
         }
@@ -246,7 +248,6 @@ public class ProductDAO {
             pstmt.close();
             rs.close();
 
-
             return product;
 
         } catch (SQLException e) {
@@ -255,7 +256,7 @@ public class ProductDAO {
         }
     }
 
-    public boolean delete(Product product) {
+    public boolean delete(Product product) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM products WHERE id = ?");
 
@@ -267,6 +268,7 @@ public class ProductDAO {
 
             return true;
         } catch (SQLException e) {
+            this.conn.close();
             e.printStackTrace();
             return false;
         }
@@ -334,7 +336,7 @@ public class ProductDAO {
             return 0;
         }
     }
-    
+
     public List listLowStock() throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE stock < 10");

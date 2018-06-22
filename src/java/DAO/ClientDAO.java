@@ -19,11 +19,11 @@ import java.util.logging.Logger;
  * @author jefferson
  */
 public class ClientDAO {
+
     private Connection conn;
     private Helper helper = new Helper();
-    
-    public ClientDAO()
-    {
+
+    public ClientDAO() {
         try {
             this.conn = ConnectionFactory.getConnection();
 
@@ -31,9 +31,8 @@ public class ClientDAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
-    public Client login(String email, String password)
-    {
+
+    public Client login(String email, String password) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients WHERE email = ? AND password = ?;");
             pstmt.setString(1, email);
@@ -51,30 +50,30 @@ public class ClientDAO {
                 client.setHomeNumber(rs.getInt("home_number"));
                 client.setZipcode(rs.getString("zipcode"));
                 client.setCityId(rs.getInt("city_id"));
-                
+
                 CityDAO cityDAO = new CityDAO();
                 client.setCity(cityDAO.view(rs.getInt("city_id")));
-                
+
                 client.setIsAdmin(rs.getBoolean("is_admin"));
             }
 
             pstmt.close();
             rs.close();
-            
+            this.conn.close();
             return client;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
-        }        
+        }
     }
-    
-    public List index()
-    {
-       try {
+
+    public List index() {
+        try {
             PreparedStatement pstmt = conn.prepareStatement(
                     "SELECT cl.*, ci.*, st.* FROM clients cl, cities ci, states st "
-                            + "WHERE ci.id = cl.city_id AND ci.state_id = st.id;");
+                    + "WHERE ci.id = cl.city_id AND ci.state_id = st.id;");
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -84,7 +83,7 @@ public class ClientDAO {
                 Client client = new Client();
                 City city = new City();
                 State state = new State();
-                
+
                 client.setId(rs.getInt("cl.id"));
                 client.setName(rs.getString("cl.name"));
                 client.setEmail(rs.getString("cl.email"));
@@ -101,18 +100,18 @@ public class ClientDAO {
                 client.setHomeNumber(Integer.parseInt(rs.getString("cl.home_number")));
                 client.setComplement(rs.getString("cl.complement"));
                 client.setDistrict(rs.getString("cl.district"));
-                
+
                 state.setId(rs.getInt("st.id"));
                 state.setName(rs.getString("st.name"));
                 state.setUf(rs.getString("st.uf"));
-                
+
                 city.setId(rs.getInt("ci.id"));
                 city.setName(rs.getString("ci.name"));
                 city.setStateId(rs.getInt("ci.state_id"));
 
                 city.setState(state);
                 client.setCity(city);
-                
+
                 listClients.add(client);
             }
 
@@ -126,9 +125,8 @@ public class ClientDAO {
             return null;
         }
     }
-    
-    public boolean add(Client client)
-    {
+
+    public boolean add(Client client) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO clients (name, cpf, email, password, cellphone, birthday, address, zipcode, district, complement, home_number, city_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -149,18 +147,19 @@ public class ClientDAO {
             pstmt.setInt(11, client.getHomeNumber());
             pstmt.setInt(12, client.getCityId());
             pstmt.executeUpdate();
-            
+
             pstmt.close();
+            this.conn.close();
             return true;
-            
+
         } catch (SQLException e) {
-           e.printStackTrace();
+            this.conn.close();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public boolean edit(Client client)
-    {
+
+    public boolean edit(Client client) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("UPDATE clients SET name = ?, cpf = ?, email = ?, cellphone = ?,"
                     + " birthday = ?, address = ?, zipcode = ?, district = ?, complement = ?, "
@@ -184,16 +183,17 @@ public class ClientDAO {
             pstmt.setInt(12, client.getId());
             pstmt.executeUpdate();
             pstmt.close();
+            this.conn.close();
             return true;
         } catch (SQLException e) {
-           e.printStackTrace();
+            this.conn.close();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public Client view(int id)
-    {
-       try {
+
+    public Client view(int id) throws SQLException {
+        try {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM clients WHERE id = ?");
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -222,32 +222,33 @@ public class ClientDAO {
 
             pstmt.close();
             rs.close();
-
+            this.conn.close();
             return client;
 
         } catch (SQLException e) {
+            this.conn.close();
             System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
-    
-    public boolean delete(Client client)
-    {
+
+    public boolean delete(Client client) throws SQLException {
         try {
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM clients WHERE id = ?");
             pstmt.setInt(1, client.getId());
             pstmt.executeUpdate();
             pstmt.close();
+            this.conn.close();
             return true;
         } catch (SQLException e) {
-           e.printStackTrace();
+            this.conn.close();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    public boolean cpfAlready(int id, String cpf)
-    {
-       try {
+
+    public boolean cpfAlready(int id, String cpf) {
+        try {
             PreparedStatement pstmt = null;
             if (id != 0) {
                 pstmt = conn.prepareStatement("SELECT * FROM clients WHERE cpf = ? AND id != ?");
@@ -257,10 +258,8 @@ public class ClientDAO {
                 pstmt = conn.prepareStatement("SELECT * FROM clients WHERE cpf = ?");
                 pstmt.setString(1, cpf);
             }
-            
-            ResultSet rs = pstmt.executeQuery();
 
-            Client client = new Client();
+            ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 pstmt.close();
@@ -278,10 +277,9 @@ public class ClientDAO {
             return false;
         }
     }
-    
-    public boolean emailAlready(int id, String email)
-    {
-       try {
+
+    public boolean emailAlready(int id, String email) {
+        try {
             PreparedStatement pstmt = null;
             if (id != 0) {
                 pstmt = conn.prepareStatement("SELECT * FROM clients WHERE email = ? AND id != ?");
@@ -293,7 +291,6 @@ public class ClientDAO {
             }
             ResultSet rs = pstmt.executeQuery();
 
-            Client client = new Client();
 
             if (rs.next()) {
                 pstmt.close();
@@ -311,18 +308,16 @@ public class ClientDAO {
             return false;
         }
     }
-    
-    public boolean passwordMathConfirmPassword(String password, String confirmPassword)
-    {
-       if (password.equals(confirmPassword)) {
-           return true;
-       }
-       
-       return false;
+
+    public boolean passwordMathConfirmPassword(String password, String confirmPassword) {
+        if (password.equals(confirmPassword)) {
+            return true;
+        }
+
+        return false;
     }
-    
-    public String removeMaskCPF(String cpf)
-    {
+
+    public String removeMaskCPF(String cpf) {
         cpf = cpf.replaceAll("[.-]", "");
         return cpf;
     }

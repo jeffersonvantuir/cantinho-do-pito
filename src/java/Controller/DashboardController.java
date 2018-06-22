@@ -1,12 +1,12 @@
 
 package Controller;
 
+import DAO.BuyDAO;
 import DAO.ProductDAO;
 import DAO.RequestDAO;
 import Model.Product;
 import Model.Request;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +26,7 @@ public class DashboardController extends HttpServlet {
     private RequestDAO requestDAO;
     private Product product;
     private ProductDAO productDAO;
+    private BuyDAO buyDAO;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,14 +38,18 @@ public class DashboardController extends HttpServlet {
             requests =  new Request();
             product = new Product();
             productDAO = new ProductDAO();
+            buyDAO = new BuyDAO();
             if (action == null) {
                 action = "";
             }
             
             switch (action) {
                 default:
-                    request.setAttribute("allRequests", requestDAO.allrequests());
+                    request.setAttribute("allRequests", requestDAO.getAllRequests());
                     request.setAttribute("lowStock", productDAO.lowStock());
+                    request.setAttribute("totalMonthlyAmount", buyDAO.getTotalMonthlyAmount());
+                    request.setAttribute("totalMonthlyPurchases", buyDAO.getTotalMonthlyPurchases());
+                    request.setAttribute("totalPurchasesToAccept", buyDAO.getTotalPurchasesToAccept());
                     rd = request.getRequestDispatcher("Dashboard/index.jsp");
                     rd.forward(request, response);
                     break;

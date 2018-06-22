@@ -78,7 +78,7 @@ public class AccessController extends HttpServlet {
         if (client != null) {
             request.getSession().invalidate();
             request.setAttribute("success", "Logout.");
-            rd = request.getRequestDispatcher("clients?action=request-login");
+            rd = request.getRequestDispatcher("/clients?action=request-login");
             rd.forward(request, response);
         }
     }

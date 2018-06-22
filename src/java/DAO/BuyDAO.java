@@ -1,7 +1,7 @@
 package DAO;
 
 import Model.Buy;
-import Model.BuyProduct;
+import Model.Client;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -86,6 +86,19 @@ public class BuyDAO {
             return false;
         }
     }
+
+    public boolean updateAuthorized(String id)
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE buy SET authorized = TRUE WHERE id = ?");
+            pstmt.setString(1, id);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
     
         
     public Buy view(String id)
@@ -153,4 +166,101 @@ public class BuyDAO {
         }
     }
     
+    public List<Buy> getBuyRequests()
+    {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("select buy.*, clients.* from buy, clients WHERE buy.client_id = clients.id AND buy.authorized = FALSE");
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Buy> listBuy = new ArrayList<Buy>();
+            
+            while (rs.next()) {
+                Buy buy = new Buy();
+                Client client = new Client();
+                buy.setId(rs.getString("buy.id"));
+                buy.setAuthorized(rs.getBoolean("buy.authorized"));
+                buy.setDate(rs.getString("buy.date"));
+                buy.setClientId(rs.getInt("buy.client_id"));
+                buy.setTotalPrice(rs.getDouble("buy.total_price"));
+                buy.setAddressId(rs.getString("buy.address_id"));
+                
+                client.setName(rs.getString("clients.name"));
+                client.setCpf(rs.getString("clients.cpf"));
+                client.setEmail(rs.getString("clients.email"));
+                client.setCellphone(rs.getString("clients.cellphone"));
+
+                buy.setClient(client);
+                
+                listBuy.add(buy);
+            }
+            pstmt.execute();
+            pstmt.close();
+            
+            return listBuy;
+            
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+    
+        public double getTotalMonthlyAmount() throws SQLException 
+        {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("SELECT SUM(total_price) as total_price FROM buy WHERE YEAR(date) = YEAR(now()) AND MONTH(date) =  MONTH(now())");
+                ResultSet rs = pstmt.executeQuery();
+                double count = 0;
+                while (rs.next()) {
+                    count = rs.getDouble("total_price");
+                }
+                pstmt.execute();
+                pstmt.close();
+                return count;
+            } catch (SQLException e) {
+                this.conn.close();
+                System.out.println("Error: " + e.getMessage());
+                return 0;
+            }
+        }
+    
+        public int getTotalMonthlyPurchases() throws SQLException 
+        {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(id) as buys FROM buy WHERE YEAR(date) = YEAR(now()) AND MONTH(date) =  MONTH(now())");
+                ResultSet rs = pstmt.executeQuery();
+                int count = 0;
+                while (rs.next()) {
+                    count = rs.getInt("buys");
+                }
+                pstmt.execute();
+                pstmt.close();
+                return count;
+            } catch (SQLException e) {
+                this.conn.close();
+                System.out.println("Error: " + e.getMessage());
+                return 0;
+            }
+        }
+        
+        public int getTotalPurchasesToAccept() throws SQLException 
+        {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(id) as buys FROM buy WHERE buy.authorized = FALSE");
+                ResultSet rs = pstmt.executeQuery();
+                int count = 0;
+                while (rs.next()) {
+                    count = rs.getInt("buys");
+                }
+                pstmt.execute();
+                pstmt.close();
+                this.conn.close();
+                return count;
+            } catch (SQLException e) {
+                this.conn.close();
+                System.out.println("Error: " + e.getMessage());
+                return 0;
+            }
+        }
 }

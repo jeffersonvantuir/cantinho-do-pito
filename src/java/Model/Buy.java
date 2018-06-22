@@ -7,13 +7,22 @@ import java.util.List;
  * @author jefferson
  */
 public class Buy {
-   String id;
-   double totalPrice;
-   String date;
-   boolean authorized;
-   int clientId;
-   String addressId;
-   List<BuyProduct> listBuyProduct;
+   private String id;
+   private double totalPrice;
+   private String date;
+   private boolean authorized;
+   private int clientId;
+   private String addressId;
+   private List<BuyProduct> listBuyProduct;
+   private Client client;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
     public String getId() {
         return id;

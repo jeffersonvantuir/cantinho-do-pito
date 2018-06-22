@@ -8,6 +8,7 @@ import Model.Client;
 import Model.State;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ public class ClientsController extends HttpServlet {
     private Client client;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NoSuchAlgorithmException {
+            throws ServletException, IOException, NoSuchAlgorithmException, SQLException {
 
         response.setContentType("text/html;charset=ISO-8859-1");
         String action = request.getParameter("action");
@@ -270,6 +271,8 @@ public class ClientsController extends HttpServlet {
             processRequest(request, response);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(ClientsController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -277,6 +280,8 @@ public class ClientsController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(ClientsController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(ClientsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
